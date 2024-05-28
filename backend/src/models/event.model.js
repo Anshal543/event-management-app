@@ -1,0 +1,81 @@
+import mongoose, { Schema } from "mongoose";
+
+const eventSchema = new Schema({
+    title: {
+        type: String,
+        required: [true, "Title Required!"],
+        minLength: [3, "Title must contain at least 3 characters!"],
+    },
+    description: {
+        type: String,
+        required: [true, "Description Required!"],
+        minLength: [10, "Description must contain at least 10 characters!"],
+    },
+    image: {
+        type: String,
+        required: [true, "Image Required!"],
+    },
+    details: {
+        type: {
+            //technical, cultural , social
+            type: String,
+            required: true,
+            minLength: [3, "Type must contain at least 3 characters!"],
+        },
+        location: {
+            type: String,
+            required: [true, "Location Required!"],
+            minLength: [3, "Location must contain at least 3 characters!"],
+
+        },
+
+        registrationFee: {
+            type: Number,
+            default: 0,
+
+        },
+    },
+    dates: {
+        registrationStart: {
+            type: Date,
+            required: true,
+        },
+        startOfEvent: {
+            type: Date,
+            required: true,
+        },
+        endOfEvent: {
+            type: Date,
+            required: true,
+        },
+        resultOfEvent: {
+            type: Date,
+        },
+    },
+
+
+    prizes: [
+        {
+            type: {
+                type: String,
+                required: true,
+                minLength: [3, "Type must contain at least 3 characters!"],
+            },
+            winner: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+            amount: {
+                type: Number,
+                required: true,
+                default: 0,
+            },
+        },
+    ],
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
+
+
+}, { timestamps: true });
+
+export const Event = mongoose.model('Event', eventSchema);
