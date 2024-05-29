@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import Login from './pages/Login'
 import  Navibar  from './components/layout/Navibar'
+import Footer from './components/layout/Footer'
 axios.defaults.withCredentials=true 
 
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+     <Footer  />
       </BrowserRouter>
     </div>
   )
