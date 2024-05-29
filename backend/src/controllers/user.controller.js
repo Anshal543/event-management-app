@@ -43,3 +43,26 @@ export const login = async (req, res, next) => {
     }
 
 };
+
+export const auth = async (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+        // const {id} = req.params;
+
+        if (!token) {
+            return res.status(401).json({ message: "you dont have any user" })
+        }
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(verified.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const { password, ...rest } = user._doc;
+
+        res.status(200).json({ rest });
+    }
+    catch (error) {
+        next(error);
+    }
+
+}
