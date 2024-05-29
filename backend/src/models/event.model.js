@@ -1,22 +1,24 @@
 import mongoose, { Schema } from "mongoose";
 
-const eventSchema = new Schema({
-    title: {
-        type: String,
-        required: [true, "Title Required!"],
-        minLength: [3, "Title must contain at least 3 characters!"],
-    },
-    description: {
-        type: String,
-        required: [true, "Description Required!"],
-        minLength: [10, "Description must contain at least 10 characters!"],
-    },
-    image: {
-        type: String,
-        required: [true, "Image Required!"],
-    },
-    details: {
-        type: {
+const eventSchema = new Schema(
+    {
+        title: {
+            type: String,
+            unique: true,
+            required: [true, "Title Required!"],
+            minLength: [3, "Title must contain at least 3 characters!"],
+        },
+        description: {
+            type: String,
+            required: [true, "Description Required!"],
+            minLength: [10, "Description must contain at least 10 characters!"],
+        },
+        image: {
+            type: String,
+            required: [true, "Image Required!"],
+        },
+
+        typeOfEvent: {
             //technical, cultural , social
             type: String,
             required: true,
@@ -26,16 +28,13 @@ const eventSchema = new Schema({
             type: String,
             required: [true, "Location Required!"],
             minLength: [3, "Location must contain at least 3 characters!"],
-
         },
 
         registrationFee: {
             type: Number,
             default: 0,
-
         },
-    },
-    dates: {
+
         registrationStart: {
             type: Date,
             required: true,
@@ -48,34 +47,32 @@ const eventSchema = new Schema({
             type: Date,
             required: true,
         },
-        resultOfEvent: {
+        timeOfEvent: {
+            type: String,
+            required: true,
+        },
+        dateOfResult: {
             type: Date,
         },
-    },
 
-
-    prizes: [
-        {
-            type: {
-                type: String,
-                required: true,
-                minLength: [3, "Type must contain at least 3 characters!"],
-            },
-            winner: {
+        winner: [
+            {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
-            },
-            amount: {
-                type: Number,
-                required: true,
-                default: 0,
-            },
+            }
+        ],
+
+        amountOfWinner: {
+            type: Number,
+            default: 0,
         },
-    ],
-    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        typeOfCompetition: {
+            type: String,
+            minLength: [3, "Type must contain at least 3 characters!"],
+        },
+        participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    },
+    { timestamps: true }
+);
 
-
-
-}, { timestamps: true });
-
-export const Event = mongoose.model('Event', eventSchema);
+export const Event = mongoose.model("Event", eventSchema);

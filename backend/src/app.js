@@ -10,13 +10,15 @@ app.use(cors({
 
 app.use(express.json({ limit: "16kb" }))
 app.use(express.urlencoded({ extended: true, limit: "16kb" }))
-app.use(express.static("public"))
+app.use(express.static("./public"))
 app.use(cookieParser())
 
 // import routes
 import userRouter from "./routes/user.route.js"
+import eventRouter from "./routes/event.route.js"
 
 app.use("/api/v1/users", userRouter)
+app.use("/api/v1/events", eventRouter)
 
 app.use((err, req, res, next) => {
     // 
@@ -32,10 +34,8 @@ app.use((err, req, res, next) => {
 })
 
 
-// router declaration
-// app.use("/api/v1/users", userRouter)
-
-//http://localhost:3000/api/v1/users/register
+//http://localhost:8080/api/v1/users
+//http://localhost:8080/api/v1/events
 
 
 

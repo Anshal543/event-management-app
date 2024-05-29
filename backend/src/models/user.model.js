@@ -30,6 +30,9 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    participatedEvents: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Event" }
+    ],
 
 
 }, { timestamps: true });
