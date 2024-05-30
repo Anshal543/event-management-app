@@ -1,38 +1,43 @@
-import React from 'react'
-import axios from 'axios'
-
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import MainPage from './pages/MainPage'
-import Login from './pages/Login'
-import  Navibar  from './components/layout/Navibar'
-import Footer from './components/layout/Footer'
-axios.defaults.withCredentials=true 
-
+import React, { useEffect } from "react";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from "./pages/MainPage";
+import Login from "./pages/Login";
+import Navibar from "./components/layout/Navibar";
+import Footer from "./components/layout/Footer";
+import { login } from "./features/auth/authSlice";
+import { useDispatch } from "react-redux";
+axios.defaults.withCredentials = true;
 
 const App = () => {
+  const dispatch = useDispatch();
 
-  // useEffect(()=>{
-  //   const getData=async()=>{
-      
-  //     const data = await axios.get(`${import.meta.env.VITE_BACKEND}/auth/user`)
-  //     if(data.status==200){
-  //       dispatch(login(data?.data))   
-  //     }
-  //   }
-  //   getData()
-  // },[])
+  useEffect(() => {
+    const getData = async () => {
+      const data = await axios.get(
+        `${import.meta.env.VITE_BACKEND_AUTH_URL}/auth`
+      );
+      if (data) {
+        dispatch(login(data?.data));
+      }
+    };
+    getData();
+  }, []);
   return (
     <div>
       <BrowserRouter>
         <Navibar />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-     <Footer  />
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
