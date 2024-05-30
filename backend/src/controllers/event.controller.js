@@ -58,12 +58,13 @@ export const getEvents = async (req, res, next) => {
     try {
 
 
-        const { title } = req.body;
-        const events = await Event.find({
-            $or: [
-                { title: { $regex: title, $options: 'i' } }
-            ]
-        });
+        // const { title } = req.body;
+        // const events = await Event.find({
+        //     $or: [
+        //         { title: { $regex: title, $options: 'i' } }
+        //     ]
+        // });
+        const events = await Event.find();
         res.status(200).json(events);
     }
     catch (error) {

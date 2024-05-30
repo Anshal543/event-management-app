@@ -9,6 +9,8 @@ import Navibar from "./components/layout/Navibar";
 import Footer from "./components/layout/Footer";
 import { login } from "./features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import NotFoundPage from "./pages/NotFoundPage";
+import CreateEventPage from "./pages/CreateEventPage";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -33,6 +35,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/create-event" element={<CreateEventPage />} />
+          <Route path="*" element={<NotFoundPage/>} />
         </Routes>
         <Footer />
       </BrowserRouter>
