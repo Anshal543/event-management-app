@@ -35,8 +35,9 @@ export const login = async (req, res, next) => {
             return res.status(400).json({ message: "Invalid password" })
 
         }
+        const { password: hashedpassword, ...rest } = checkUser[0]._doc;
         const token = jwt.sign({ id: checkUser[0]._id, user: checkUser[0].username }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        res.cookie('token', token, { httpOnly: true }).json({ message: "Login successfully" });
+        res.cookie('token', token, { httpOnly: true }).json(rest);
         // res.status(200).json({ checkUser });
     } catch (error) {
         next(error);

@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import { login } from '../features/auth/authSlice';
 
 const loginSchema = z.object({
   email: z.string().nonempty({ message: "Email is required" }).email({ message: "Invalid email address" }),
@@ -13,6 +15,8 @@ const loginSchema = z.object({
 const Login = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.auth.userInfo);
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({
     resolver: zodResolver(loginSchema),
@@ -20,9 +24,11 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/users/login', data);
-      console.log('Login successful:', response.data);
-      navigate('/');
+      dispatch(login({ email: data.email, password: data.password }));
+      if(userInfo){
+
+        navigate('/');
+      }
       // Handle successful login (e.g., redirect, store token, etc.)
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
