@@ -32,6 +32,18 @@ export const createEvent = async (req, res, next) => {
         if (!image) {
             return next(customError(500, "Image upload failed!"));
         }
+        // const newEvent = await Event.create({
+        //     title,
+        //     description,
+        //     image: image.url,
+        //     typeOfEvent,
+        //     location,
+        //     registrationFee,
+        //     registrationStart,
+        //     startOfEvent,
+        //     endOfEvent,
+        //     timeOfEvent
+        // });
         const newEvent = await Event.create({
             title,
             description,
@@ -39,11 +51,13 @@ export const createEvent = async (req, res, next) => {
             typeOfEvent,
             location,
             registrationFee,
-            registrationStart,
-            startOfEvent,
-            endOfEvent,
-            timeOfEvent
+            registrationStart: new Date(registrationStart).toISOString(),
+            startOfEvent: new Date(startOfEvent).toISOString(),
+            endOfEvent: new Date(endOfEvent).toISOString(),
+            timeOfEvent,
         });
+        
+        
 
 
         res.status(201).json(newEvent);
@@ -71,3 +85,17 @@ export const getEvents = async (req, res, next) => {
         next(error)
     }
 }   
+
+export const getSingleEvent = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const event = await Event.findById(id);
+        if (!event) {
+            return next(customError(404, "Event not found!"));
+        }
+        res.status(200).json(event);
+    }
+    catch (error) {
+        next(error)
+    }
+}

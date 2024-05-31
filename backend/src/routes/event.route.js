@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createEvent, getEvents } from '../controllers/event.controller.js';
+import { createEvent, getEvents, getSingleEvent } from '../controllers/event.controller.js';
 import { upload } from '../middlewares/multer.middleware.js';
 
 
@@ -13,6 +13,7 @@ router.route("/create").post(
     }
 ]), createEvent);
 router.route("/get").get(getEvents);
+router.route("/event/:id").get(getSingleEvent);
 
 
 

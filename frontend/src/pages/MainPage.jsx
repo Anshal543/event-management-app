@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getEvents, selectEvents } from "../features/events/eventSlice";
+import { useNavigate } from "react-router-dom";
 
 const events = [
   {
@@ -38,10 +39,15 @@ const events = [
 const MainPage = () => {
   const events = useSelector(selectEvents)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(()=>{
     dispatch(getEvents())
   },[])
+
+  const handleViewDetails = (id) => {
+    navigate(`/single-event/${id}`);
+  };
 
   return (
     <div className="flex flex-wrap justify-start sm:justify-center">
@@ -53,7 +59,9 @@ const MainPage = () => {
             <p className="text-gray-700 text-base">{event.description}</p>
           </div>
           <div className="px-6 pt-4 pb-2">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button
+             onClick={() => handleViewDetails(event._id)}
+             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               View Details
             </button>
           </div>

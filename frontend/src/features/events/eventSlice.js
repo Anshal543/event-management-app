@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getEvents = createAsyncThunk('events/getEvents', async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/get`);
-        console.log(response.data);
+        // console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -18,6 +18,16 @@ export const createEvent = createAsyncThunk('events/createEvent', async (event) 
                 'Content-Type': 'multipart/form-data',
             },
         });
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+});
+
+export const getSingleEvent = createAsyncThunk('events/getSingleEvent', async (id) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/event/${id}`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -58,6 +68,20 @@ const eventsSlice = createSlice({
                 state.eventsLoading = false;
             })
             .addCase(createEvent.rejected, (state, action) => {
+                state.eventsError = action.payload;
+                state.eventsLoading = false;
+            })
+
+            .addCase(getSingleEvent.pending, (state, action) => {
+                state.eventsLoading = true;
+                state.eventsError = null;
+            })
+            .addCase(getSingleEvent.fulfilled, (state, action) => {
+                state.events = [action.payload];
+                state.eventsError = null;
+                state.eventsLoading = false;
+            })
+            .addCase(getSingleEvent.rejected, (state, action) => {
                 state.eventsError = action.payload;
                 state.eventsLoading = false;
             });
