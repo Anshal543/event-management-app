@@ -22,6 +22,7 @@ const App = () => {
       const data = await axios.get(
         `${import.meta.env.VITE_BACKEND_AUTH_URL}/auth`
       );
+      console.log(data.data);
       if (data) {
         dispatch(login(data?.data));
       }

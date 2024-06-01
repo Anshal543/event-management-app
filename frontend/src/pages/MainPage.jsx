@@ -50,6 +50,11 @@ const MainPage = () => {
   };
 
   return (
+    <>
+    {
+      !events ?<div>Loading...</div>: null
+      
+    }
     <div className="flex flex-wrap justify-start sm:justify-center">
       {events.map((event, index) => (
         <div key={event.id} className={` min-w-xl  rounded overflow-hidden shadow-lg m-4 ${events.length === 1 && index === 0 ? 'self-start' : ''}`}>
@@ -68,6 +73,7 @@ const MainPage = () => {
         </div>
       ))}
     </div>
+      </>
   );
 };
 

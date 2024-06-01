@@ -3,7 +3,8 @@ import axios from 'axios';
 
 export const login = createAsyncThunk('auth/login', async (data) => {
     try {
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_AUTH_URL}/login`,data);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_AUTH_URL}/auth`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
