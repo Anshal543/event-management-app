@@ -129,3 +129,18 @@ export const registerInEvent = async (req, res, next) => {
         next(error)
     }
 }
+
+export const getRegisteredEvents = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId).populate('participatedEvents');
+        if (!user) {
+            return next(customError(404, "User not found!"));
+        }
+        res.status(200).json(user.participatedEvents);
+    }
+    catch (error) {
+        next(error)
+    }
+
+}

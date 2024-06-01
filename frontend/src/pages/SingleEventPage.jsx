@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getSingleEvent } from '../features/events/eventSlice';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { selectUserInfo } from '../features/auth/authSlice';
 
 const SingleEventPage = () => {
   const navigate = useNavigate();

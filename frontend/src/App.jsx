@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import NotFoundPage from "./pages/NotFoundPage";
 import CreateEventPage from "./pages/CreateEventPage";
 import SingleEventPage from "./pages/SingleEventPage";
+import GetRegisterEvent from "./pages/GetRegisterEvent";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/create-event" element={<CreateEventPage />} />
           <Route path="/single-event/:id" element={<SingleEventPage />} />
+          <Route path="/getRegisteredEvents/:id" element={<GetRegisterEvent />} />
           <Route path="*" element={<NotFoundPage/>} />
         </Routes>
         <Footer />

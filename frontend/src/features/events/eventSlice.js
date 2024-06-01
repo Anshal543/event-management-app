@@ -34,6 +34,16 @@ export const getSingleEvent = createAsyncThunk('events/getSingleEvent', async (i
     }
 });
 
+export const getRegisteredEvents = createAsyncThunk('events/getRegisteredEvents', async (userId) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/getRegisteredEvents/${userId}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+});
+
 const eventsSlice = createSlice({
     name: 'events',
     initialState: {
@@ -82,6 +92,20 @@ const eventsSlice = createSlice({
                 state.eventsLoading = false;
             })
             .addCase(getSingleEvent.rejected, (state, action) => {
+                state.eventsError = action.payload;
+                state.eventsLoading = false;
+            })
+
+            .addCase(getRegisteredEvents.pending, (state, action) => {
+                state.eventsLoading = true;
+                state.eventsError = null;
+            })
+            .addCase(getRegisteredEvents.fulfilled, (state, action) => {
+                state.events = action.payload;
+                state.eventsError = null;
+                state.eventsLoading = false;
+            })
+            .addCase(getRegisteredEvents.rejected, (state, action) => {
                 state.eventsError = action.payload;
                 state.eventsLoading = false;
             });
