@@ -144,3 +144,21 @@ export const getRegisteredEvents = async (req, res, next) => {
     }
 
 }
+
+// delete event by admin only
+
+export const deleteEvent = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const event = await Event.findByIdAndDelete(id);
+        if (!event) {
+            return next(customError(404, "Event not found!"));
+        }
+        res.status(200).json({
+            message: 'Event deleted successfully!',
+        });
+    }
+    catch (error) {
+        next(error)
+    }
+}

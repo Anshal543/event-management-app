@@ -56,6 +56,20 @@ const SingleEventPage = () => {
     }
   }
 
+  const HandleRemoveEvent = async(eventId) => {
+    try {
+      console.log("enter handle re");
+      const response = await axios.delete(`http://localhost:8080/api/v1/events/delete/${eventId}`);
+      console.log(response.data);
+      toast.success('Event Deleted successfully!');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000); // navigate to home page after 2 seconds
+    } catch (error) {
+      toast.error('Error Deleting event!');
+    }
+  }
+
 
   return (
     <>
@@ -79,6 +93,9 @@ const SingleEventPage = () => {
       <button
       onClick={()=>handleRegister(event._id,userId)}
        className=' bg-red-600 rounded-md  text-white p-4 hover:bg-red-500 '>Register in Event</button>
+      <button
+      onClick={()=>HandleRemoveEvent(event._id)}
+       className=' bg-red-600 rounded-md  text-white p-4 hover:bg-red-500 '>Remove Event</button>
     
     </div>
     </>
