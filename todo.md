@@ -1,3 +1,2 @@
-# Pending 1-user update and delete api's
++ add city object in event schema
 
-# Pending 2-complete create and get apis in frontend using redux toolkit

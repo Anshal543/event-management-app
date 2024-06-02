@@ -30,6 +30,11 @@ const SingleEventPage = () => {
     const date = new Date(dateString);
     return date ? date.toLocaleDateString() : 'N/A';
   };
+  const formatTime = (timeString) => {
+    if (!timeString) return 'N/A';
+    const date = new Date(`1970-01-01T${timeString}Z`);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  };
 
 
   // 6656125ae9e5f80ee712076c
@@ -57,12 +62,15 @@ const SingleEventPage = () => {
       )}
       <p className="text-gray-700 mb-4"><strong>Description:</strong> {event.description}</p>
       <p className="text-gray-700 mb-4"><strong>Type of Event:</strong> {event.typeOfEvent}</p>
-      <p className="text-gray-700 mb-4"><strong>Location:</strong> {event.location}</p>
+      {/* <p className="text-gray-700 mb-4"><strong>Location:</strong> {event.location}</p> */}
+      <p>
+        <strong>Location:</strong> <a href={event.location} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{event.location}</a>
+      </p>
       <p className="text-gray-700 mb-4"><strong>Registration Fee:</strong> {event.registrationFee}</p>
       <p className="text-gray-700 mb-4"><strong>Registration Start:</strong> {formatDate(event.registrationStart)}</p>
       <p className="text-gray-700 mb-4"><strong>Start of Event:</strong> {formatDate(event.startOfEvent)}</p>
       <p className="text-gray-700 mb-4"><strong>End of Event:</strong> {formatDate(event.endOfEvent)}</p>
-      <p className="text-gray-700 mb-4"><strong>Time of Event:</strong> {event.timeOfEvent}</p>
+      <p className="text-gray-700 mb-4"><strong>Time of Event:</strong> {formatTime(event.timeOfEvent)}</p>
   
       <button
       onClick={()=>handleRegister(event._id,userId)}

@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Disclosure,
   DisclosureButton,
@@ -10,19 +11,42 @@ import {
   Transition,
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'    
+import { useSelector } from 'react-redux'
 
-const navigation = [
+const initialNavigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Team', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+  { name: 'Your Events', href: '/getRegisteredEvents/USER_ID', current: false },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navibar() {
+
+ 
+  
+
+  const userId = useSelector(state => state.auth.userInfo?.rest?._id);
+
+
+ 
+    
+    const [navigation, setNavigation] = useState(initialNavigation);
+    
+    useEffect(() => {
+      // Update navigation when userId changes and is not null
+      if (userId) {
+        setNavigation(navigation.map(item => ({
+          ...item,
+          href: item.href.includes('USER_ID') ? item.href.replace('USER_ID', userId) : item.href,
+        })));
+      }
+    }, [userId]);
+
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -52,9 +76,9 @@ export default function Navibar() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
@@ -62,7 +86,7 @@ export default function Navibar() {
                         aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
