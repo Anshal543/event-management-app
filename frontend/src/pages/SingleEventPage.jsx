@@ -41,6 +41,10 @@ const SingleEventPage = () => {
   const handleRegister = async(eventId,userId) => {
     try {
       console.log("enter handle re");
+      if (event.participants.includes(userId)) {
+        toast.warning('You are already registered for this event!');
+        return; // Do not proceed with registration
+      }
       const response = await axios.post(`http://localhost:8080/api/v1/events/evt/${eventId}/register/${userId}`);
       console.log(response.data);
       toast.success('Registered in event successfully!');
