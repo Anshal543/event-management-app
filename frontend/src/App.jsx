@@ -13,6 +13,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CreateEventPage from "./pages/CreateEventPage";
 import SingleEventPage from "./pages/SingleEventPage";
 import GetRegisterEvent from "./pages/GetRegisterEvent";
+import SignUpPage from "./pages/SignUpPage";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<SignUpPage />} />
           <Route path="/create-event" element={<CreateEventPage />} />
           <Route path="/single-event/:id" element={<SingleEventPage />} />
           <Route path="/getRegisteredEvents/:id" element={<GetRegisterEvent />} />

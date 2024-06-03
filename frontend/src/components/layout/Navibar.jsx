@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Fragment, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Disclosure,
   DisclosureButton,
@@ -9,43 +9,39 @@ import {
   MenuItem,
   MenuItems,
   Transition,
-} from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'    
-import { useSelector } from 'react-redux'
+} from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
 
 const initialNavigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Your Events', href: '/getRegisteredEvents/USER_ID', current: false },
+  { name: "Dashboard", href: "#", current: true },
+  { name: "Team", href: "#", current: false },
+  { name: "Projects", href: "#", current: false },
+  { name: "Your Events", href: "/getRegisteredEvents/USER_ID", current: false },
 ];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Navibar() {
+  const userId = useSelector((state) => state.auth.userInfo?.rest?._id);
 
- 
-  
+  const [navigation, setNavigation] = useState(initialNavigation);
 
-  const userId = useSelector(state => state.auth.userInfo?.rest?._id);
-
-
- 
-    
-    const [navigation, setNavigation] = useState(initialNavigation);
-    
-    useEffect(() => {
-      // Update navigation when userId changes and is not null
-      if (userId) {
-        setNavigation(navigation.map(item => ({
+  useEffect(() => {
+    // Update navigation when userId changes and is not null
+    if (userId) {
+      setNavigation(
+        navigation.map((item) => ({
           ...item,
-          href: item.href.includes('USER_ID') ? item.href.replace('USER_ID', userId) : item.href,
-        })));
-      }
-    }, [userId]);
-
+          href: item.href.includes("USER_ID")
+            ? item.href.replace("USER_ID", userId)
+            : item.href,
+        }))
+      );
+    }
+  }, [userId]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -80,10 +76,12 @@ export default function Navibar() {
                         key={item.name}
                         to={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "rounded-md px-3 py-2 text-sm font-medium"
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
                       </Link>
@@ -127,7 +125,10 @@ export default function Navibar() {
                         {({ focus }) => (
                           <a
                             href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              focus ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
                           >
                             Your Profile
                           </a>
@@ -137,7 +138,10 @@ export default function Navibar() {
                         {({ focus }) => (
                           <a
                             href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              focus ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
                           >
                             Settings
                           </a>
@@ -147,7 +151,10 @@ export default function Navibar() {
                         {({ focus }) => (
                           <a
                             href="#"
-                            className={classNames(focus ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              focus ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
                           >
                             Sign out
                           </a>
@@ -168,10 +175,12 @@ export default function Navibar() {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md px-3 py-2 text-base font-medium"
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </DisclosureButton>
@@ -181,5 +190,5 @@ export default function Navibar() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }
