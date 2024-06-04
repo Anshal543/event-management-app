@@ -9,7 +9,7 @@
 // };
 
 export const verifyAdmin = (req, res, next) => {
-    console.log(req.user)
+    // console.log(req.user)
     if (req.user && req.user.isAdmin === true) {
       next()
     } else {

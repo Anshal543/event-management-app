@@ -29,6 +29,12 @@ const eventSchema = new Schema(
             required: [true, "Location Required!"],
             minLength: [3, "Location must contain at least 3 characters!"],
         },
+        city: {
+            type: String,
+            required: [true, "City Required!"],
+            minLength: [3, "City must contain at least 3 characters!"],
+        },
+
 
         registrationFee: {
             type: Number,

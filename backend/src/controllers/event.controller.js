@@ -2,14 +2,15 @@ import { Event } from "../models/event.model.js";
 import { User } from "../models/user.model.js";
 import { customError } from "../utils/customError.js";
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import mongoose from 'mongoose';
 
 
 
 export const createEvent = async (req, res, next) => {
-    const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent } = req.body;
+    const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city } = req.body;
 
 
-    if ([title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent].some(field => field?.trim() === "")) {
+    if ([title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city].some(field => field?.trim() === "")) {
         return next(customError(400, "All fields are required!"));
     }
     try {
@@ -51,6 +52,7 @@ export const createEvent = async (req, res, next) => {
             image: image.url,
             typeOfEvent,
             location,
+            city,
             registrationFee,
             registrationStart: new Date(registrationStart).toISOString(),
             startOfEvent: new Date(startOfEvent).toISOString(),
@@ -162,3 +164,52 @@ export const deleteEvent = async (req, res, next) => {
         next(error)
     }
 }
+
+// export const updateEvent = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         const event = await Event.findByIdAndUpdate(id, req.body, { new: true,runValidators: true });
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         res.status(200).json(event);
+//     }
+//     catch (error) {
+//         next(error)
+//     }
+// }
+
+export const updateEvent = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        // Validate the ID
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return next(customError(400, "Invalid event ID!"));
+        }
+
+        // Debug: Log the request body
+        console.log('Request body:', req.body);
+
+        // Find and update the event
+        const event = await Event.findByIdAndUpdate(id, { title: req.body.title }, { new: true, runValidators: true });
+
+        // Debug: Log the event object after update
+        // console.log('Updated event:', event);
+
+        // Check if the event was found
+        if (!event) {
+            return next(customError(404, "Event not found!"));
+        }
+
+        // Respond with the updated event
+        res.status(200).json(event);
+    } catch (error) {
+        // Handle validation errors
+        if (error.name === 'ValidationError') {
+            return next(customError(400, "Validation Error: " + error.message));
+        }
+        // General error handling
+        next(error);
+    }
+};
