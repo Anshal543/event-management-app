@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const login = createAsyncThunk('auth/login', async (data) => {
+export const login = createAsyncThunk('auth/login', async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_AUTH_URL}/auth`);
         console.log(response.data);
@@ -10,6 +10,17 @@ export const login = createAsyncThunk('auth/login', async (data) => {
         return error.response.data;
     }
 });
+export const logout = createAsyncThunk('auth/logout', async () => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_AUTH_URL}/logout`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+});
+
+                 
 
 const authSlice = createSlice({
     name: 'auth',
@@ -32,6 +43,20 @@ const authSlice = createSlice({
             })
 
             .addCase(login.rejected, (state, action) => {
+                state.authError = action.payload;
+            })
+
+            .addCase(logout.pending, (state, action) => {
+                state.authLoading = true;
+                state.authError = null;
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                state.userInfo = action.payload;
+                state.authError = null;
+                state.authLoading = false;
+            })
+
+            .addCase(logout.rejected, (state, action) => {
                 state.authError = action.payload;
             });
     },

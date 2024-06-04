@@ -67,3 +67,15 @@ export const auth = async (req, res, next) => {
     }
 
 }
+
+export const logout = async(req,res,next)=>{
+    try {
+        res.clearCookie("token");
+
+        // Send a success response
+        res.status(200).json({ message: "Logout successfully" });
+        
+    } catch (error) {
+        next(error)
+    }
+}
