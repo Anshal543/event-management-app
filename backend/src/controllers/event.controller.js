@@ -182,34 +182,16 @@ export const deleteEvent = async (req, res, next) => {
 export const updateEvent = async (req, res, next) => {
     try {
         const { id } = req.params;
+        console.log('Request Params:', req.params); // Log request parameters
+        console.log('Request Body:', req.body); // Log request body
 
-        // Validate the ID
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return next(customError(400, "Invalid event ID!"));
-        }
-
-        // Debug: Log the request body
-        console.log('Request body:', req.body);
-
-        // Find and update the event
-        const event = await Event.findByIdAndUpdate(id, { title: req.body.title }, { new: true, runValidators: true });
-
-        // Debug: Log the event object after update
-        // console.log('Updated event:', event);
-
-        // Check if the event was found
+        const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
-
-        // Respond with the updated event
         res.status(200).json(event);
     } catch (error) {
-        // Handle validation errors
-        if (error.name === 'ValidationError') {
-            return next(customError(400, "Validation Error: " + error.message));
-        }
-        // General error handling
+        console.error('Update Event Error:', error); // Log error details
         next(error);
     }
 };
