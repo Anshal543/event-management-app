@@ -85,6 +85,7 @@ const SingleEventPage = () => {
         <strong>Location:</strong> <a href={event.location} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{event.location}</a>
       </p>
       <p className="text-gray-700 mb-4"><strong>Registration Fee:</strong> {event.registrationFee}</p>
+      <p className="text-gray-700 mb-4"><strong>city:</strong> {event.city}</p>
       <p className="text-gray-700 mb-4"><strong>Registration Start:</strong> {formatDate(event.registrationStart)}</p>
       <p className="text-gray-700 mb-4"><strong>Start of Event:</strong> {formatDate(event.startOfEvent)}</p>
       <p className="text-gray-700 mb-4"><strong>End of Event:</strong> {formatDate(event.endOfEvent)}</p>

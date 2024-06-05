@@ -12,6 +12,7 @@ const eventSchema = z.object({
   description: z.string().nonempty("Description is required"),
   typeOfEvent: z.string().nonempty("Type of Event is required"),
   location: z.string().nonempty("Location is required"),
+  city: z.string().nonempty("City is required"),
   registrationFee: z.number().min(0, "Registration Fee must be a positive number"),
   registrationStart: z.string().nonempty("Registration Start is required"),
   startOfEvent: z.string().nonempty("Start of Event is required"),
@@ -93,6 +94,15 @@ const CreateEventPage = () => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
           {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">city:</label>
+          <input
+            type="text"
+            {...register("city")}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
         </div>
 
         <div>

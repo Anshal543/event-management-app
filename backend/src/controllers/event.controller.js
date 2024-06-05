@@ -2,7 +2,6 @@ import { Event } from "../models/event.model.js";
 import { User } from "../models/user.model.js";
 import { customError } from "../utils/customError.js";
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import mongoose from 'mongoose';
 
 
 
@@ -165,33 +164,105 @@ export const deleteEvent = async (req, res, next) => {
     }
 }
 
+
 // export const updateEvent = async (req, res, next) => {
 //     try {
 //         const { id } = req.params;
-//         const event = await Event.findByIdAndUpdate(id, req.body, { new: true,runValidators: true });
+//         console.log('Request Params:', req.params); // Log request parameters
+//         console.log('Request Body:', req.body); // Log request body
+
+//         const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
 //         if (!event) {
 //             return next(customError(404, "Event not found!"));
 //         }
 //         res.status(200).json(event);
+//     } catch (error) {
+//         console.error('Update Event Error:', error); // Log error details
+//         next(error);
 //     }
-//     catch (error) {
-//         next(error)
+// };
+
+
+// export const updateEvent = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent } = req.body;
+//         const image = req.file ? req.file.path : null;
+
+//         console.log('Request Params:', req.params);
+//         console.log('Request Body:', req.body);
+//         console.log('Request File:', req.file);
+
+//         const updateData = {
+//             title,
+//             description,
+//             typeOfEvent,
+//             location,
+//             registrationFee,
+//             registrationStart,
+//             startOfEvent,
+//             endOfEvent,
+//             timeOfEvent,
+//             ...(image && { image }) // Only include the image if it was uploaded
+//         };
+
+//         const event = await Event.findByIdAndUpdate(id, updateData, { new: true });
+//         if (!event) {
+//             return next(customError(404, 'Event not found!'));
+//         }
+//         res.status(200).json(event);
+//     } catch (error) {
+//         console.error('Update Event Error:', error); // Log error details
+//         next(error);
 //     }
-// }
+// };
 
 export const updateEvent = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        console.log('Request Params:', req.params); // Log request parameters
-        console.log('Request Body:', req.body); // Log request body
+    const { id } = req.params;
+    const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city } = req.body;
 
-        const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
+    try {
+        const event = await Event.findById(id);
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
-        res.status(200).json(event);
+
+        let updatedData = {
+            title,
+            description,
+            typeOfEvent,
+            location,
+            registrationFee,
+            registrationStart: new Date(registrationStart).toISOString(),
+            startOfEvent: new Date(startOfEvent).toISOString(),
+            endOfEvent: new Date(endOfEvent).toISOString(),
+            timeOfEvent,
+            city,
+        };
+
+        // Handle image upload if an image is provided
+        if (req.files?.image) {
+            const imageLocalPath = req.files.image[0].path;
+            const image = await uploadOnCloudinary(imageLocalPath);
+
+            if (!image) {
+                return next(customError(500, "Image upload failed!"));
+            }
+
+            // Remove the old image if it exists and update with the new one
+            if (event.image) {
+                // Add your logic to delete the old image from Cloudinary
+            }
+
+            updatedData.image = image.url;
+
+            // Clean up local file after upload
+            // await fs.unlink(imageLocalPath);
+        }
+
+        const updatedEvent = await Event.findByIdAndUpdate(id, updatedData, { new: true });
+        res.status(200).json(updatedEvent);
     } catch (error) {
-        console.error('Update Event Error:', error); // Log error details
         next(error);
     }
 };
