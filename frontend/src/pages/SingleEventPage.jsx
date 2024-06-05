@@ -30,10 +30,22 @@ const SingleEventPage = () => {
     const date = new Date(dateString);
     return date ? date.toLocaleDateString() : 'N/A';
   };
-  const formatTime = (timeString) => {
+  const formatTimeTo12Hour = (timeString) => {
     if (!timeString) return 'N/A';
-    const date = new Date(`1970-01-01T${timeString}Z`);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  
+    // Parse the time string assuming it's in the format HH:mm
+    const [hour, minute] = timeString.split(':').map(Number);
+  
+    // Determine AM or PM
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+  
+    // Adjust hour to 12-hour format
+    const hour12 = hour % 12 || 12; // Converts '0' hour to '12'
+  
+    // Format the time in 12-hour format
+    const formattedTime = `${hour12}:${minute.toString().padStart(2, '0')} ${ampm}`;
+  
+    return formattedTime;
   };
 
 
@@ -92,7 +104,7 @@ const SingleEventPage = () => {
       <p className="text-gray-700 mb-4"><strong>Registration Start:</strong> {formatDate(event.registrationStart)}</p>
       <p className="text-gray-700 mb-4"><strong>Start of Event:</strong> {formatDate(event.startOfEvent)}</p>
       <p className="text-gray-700 mb-4"><strong>End of Event:</strong> {formatDate(event.endOfEvent)}</p>
-      <p className="text-gray-700 mb-4"><strong>Time of Event:</strong> {formatTime(event.timeOfEvent)}</p>
+      <p className="text-gray-700 mb-4"><strong>Time of Event:</strong> {formatTimeTo12Hour(event.timeOfEvent)}</p>
   
       <button
       onClick={()=>handleRegister(event._id,userId)}

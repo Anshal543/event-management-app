@@ -31,6 +31,7 @@ const UpdateEventPage = () => {
         eventData.registrationStart = eventData.registrationStart ? eventData.registrationStart.split('T')[0] : '';
         eventData.startOfEvent = eventData.startOfEvent ? eventData.startOfEvent.split('T')[0] : '';
         eventData.endOfEvent = eventData.endOfEvent ? eventData.endOfEvent.split('T')[0] : '';
+        
         // eventData.timeOfEvent = eventData.timeOfEvent ? eventData.timeOfEvent.split('T')[1].split('.')[0] : '';
         setEvent(eventData);
         setImagePreview(eventData.image); // Set the initial image preview
