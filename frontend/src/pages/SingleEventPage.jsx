@@ -70,6 +70,9 @@ const SingleEventPage = () => {
     }
   }
 
+  const handleUpdateEvent = () => {
+    navigate(`/updateEvent/${event._id}`);
+  };
 
   return (
     <>
@@ -97,6 +100,9 @@ const SingleEventPage = () => {
       <button
       onClick={()=>HandleRemoveEvent(event._id)}
        className=' bg-red-600 rounded-md  text-white p-4 hover:bg-red-500 '>Remove Event</button>
+      <button
+      onClick={()=>handleUpdateEvent(event._id)}
+       className=' bg-red-600 rounded-md  text-white p-4 hover:bg-red-500 '>update event</button>
     
     </div>
     </>
