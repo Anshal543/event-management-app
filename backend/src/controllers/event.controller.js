@@ -21,7 +21,6 @@ export const createEvent = async (req, res, next) => {
         if (event) {
             return next(customError(400, "Event already exists!"));
         }
-        // TODO : destructuring the req.body and create a new event
 
         const imageLocalPath = req.files?.image[0]?.path;
         if (!imageLocalPath) {
@@ -33,18 +32,7 @@ export const createEvent = async (req, res, next) => {
         if (!image) {
             return next(customError(500, "Image upload failed!"));
         }
-        // const newEvent = await Event.create({
-        //     title,
-        //     description,
-        //     image: image.url,
-        //     typeOfEvent,
-        //     location,
-        //     registrationFee,
-        //     registrationStart,
-        //     startOfEvent,
-        //     endOfEvent,
-        //     timeOfEvent
-        // });
+     
         const newEvent = await Event.create({
             title,
             description,
@@ -146,7 +134,6 @@ export const getRegisteredEvents = async (req, res, next) => {
 
 }
 
-// delete event by admin only
 
 export const deleteEvent = async (req, res, next) => {
     try {
@@ -163,59 +150,6 @@ export const deleteEvent = async (req, res, next) => {
         next(error)
     }
 }
-
-
-// export const updateEvent = async (req, res, next) => {
-//     try {
-//         const { id } = req.params;
-//         console.log('Request Params:', req.params); // Log request parameters
-//         console.log('Request Body:', req.body); // Log request body
-
-//         const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
-//         if (!event) {
-//             return next(customError(404, "Event not found!"));
-//         }
-//         res.status(200).json(event);
-//     } catch (error) {
-//         console.error('Update Event Error:', error); // Log error details
-//         next(error);
-//     }
-// };
-
-
-// export const updateEvent = async (req, res, next) => {
-//     try {
-//         const { id } = req.params;
-//         const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent } = req.body;
-//         const image = req.file ? req.file.path : null;
-
-//         console.log('Request Params:', req.params);
-//         console.log('Request Body:', req.body);
-//         console.log('Request File:', req.file);
-
-//         const updateData = {
-//             title,
-//             description,
-//             typeOfEvent,
-//             location,
-//             registrationFee,
-//             registrationStart,
-//             startOfEvent,
-//             endOfEvent,
-//             timeOfEvent,
-//             ...(image && { image }) // Only include the image if it was uploaded
-//         };
-
-//         const event = await Event.findByIdAndUpdate(id, updateData, { new: true });
-//         if (!event) {
-//             return next(customError(404, 'Event not found!'));
-//         }
-//         res.status(200).json(event);
-//     } catch (error) {
-//         console.error('Update Event Error:', error); // Log error details
-//         next(error);
-//     }
-// };
 
 export const updateEvent = async (req, res, next) => {
     const { id } = req.params;
@@ -266,3 +200,19 @@ export const updateEvent = async (req, res, next) => {
         next(error);
     }
 };
+
+// create an api when give admin all the users who are registered in the event
+
+export const getRegisteredUsers = async (req, res, next) => {
+    try {
+        const { eventId } = req.params;
+        const event = await Event.findById(eventId).populate('participants');
+        if (!event) {
+            return next(customError(404, "Event not found!"));
+        }
+        res.status(200).json(event.participants);
+    }
+    catch (error) {
+        next(error)
+    }
+}

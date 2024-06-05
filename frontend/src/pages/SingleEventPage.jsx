@@ -11,7 +11,7 @@ const SingleEventPage = () => {
   const dispatch = useDispatch();
   const { events, eventsLoading, eventsError } = useSelector((state) => state.events);
 
-  const userId = useSelector((state)=>state.auth.userInfo.rest._id)
+  const userId = useSelector((state)=>state.auth.userInfo?.rest._id)
   
   useEffect(() => {
     dispatch(getSingleEvent(id));
