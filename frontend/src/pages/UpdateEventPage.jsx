@@ -20,12 +20,20 @@ const UpdateEventPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/events/event/${id}`);
-        setEvent(response.data);
+        const eventData = response.data;
+        // Convert date strings to the format required by the input elements
+        eventData.registrationStart = eventData.registrationStart ? eventData.registrationStart.split('T')[0] : '';
+        eventData.startOfEvent = eventData.startOfEvent ? eventData.startOfEvent.split('T')[0] : '';
+        eventData.endOfEvent = eventData.endOfEvent ? eventData.endOfEvent.split('T')[0] : '';
+        // eventData.timeOfEvent = eventData.timeOfEvent ? eventData.timeOfEvent.split('T')[1].split('.')[0] : '';
+        setEvent(eventData);
+        setImagePreview(eventData.image); // Set the initial image preview
       } catch (err) {
         setError('Could not fetch event data.');
       }
@@ -34,18 +42,35 @@ const UpdateEventPage = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEvent((prevEvent) => ({
-      ...prevEvent,
-      [name]: value
-    }));
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      const file = files[0];
+      setEvent((prevEvent) => ({
+        ...prevEvent,
+        image: file // Store the selected file
+      }));
+      setImagePreview(URL.createObjectURL(file)); // Set the image preview
+    } else {
+      setEvent((prevEvent) => ({
+        ...prevEvent,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/v1/events/update/${id}`, event);
+      const formData = new FormData();
+      for (const key in event) {
+        formData.append(key, event[key]);
+      }
+      await axios.put(`http://localhost:8080/api/v1/events/update/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       navigate(`/single-event/${id}`);
     } catch (err) {
       setError('Failed to update event.');
@@ -175,17 +200,20 @@ const UpdateEventPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="image" className="block text-gray-700 font-bold mb-2">Image URL</label>
+          <label htmlFor="image" className="block text-gray-700 font-bold mb-2">Image</label>
           <input
-            type="text"
+            type="file"
             id="image"
             name="image"
-            value={event.image}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Image URL"
           />
         </div>
+        {imagePreview && (
+          <div className="mb-4">
+            <img src={imagePreview} alt="Event" className="w-full h-64 object-cover rounded-md" />
+          </div>
+        )}
         <div className="flex justify-end">
           <button
             type="submit"
