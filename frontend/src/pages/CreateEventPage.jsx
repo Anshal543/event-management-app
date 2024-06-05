@@ -21,6 +21,10 @@ const eventSchema = z.object({
   image: z
     .instanceof(File)
     .refine((file) => file.size > 0, "Image is required"),
+  typeOfCompetition: z.string().optional(),
+  dateOfResult: z.string().optional(),
+  amountOfWinner: z.number().optional(),
+  winnerEmail: z.string().optional(),
 });
 
 const CreateEventPage = () => {
@@ -28,12 +32,15 @@ const CreateEventPage = () => {
     resolver: zodResolver(eventSchema),
   });
   const [thumbnail, setThumbnail] = useState(null);
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
     const data = new FormData();
     for (let key in formData) {
-      data.append(key, formData[key]);
+      if (formData[key]) {
+        data.append(key, formData[key]);
+      }
     }
     try {
       const response = await axios.post('http://localhost:8080/api/v1/events/create', data);
@@ -50,6 +57,10 @@ const CreateEventPage = () => {
     const file = e.target.files[0];
     setValue('image', file); // Update the form data with the file
     setThumbnail(URL.createObjectURL(file)); // Set the thumbnail for preview
+  };
+
+  const toggleAdditionalFields = () => {
+    setShowAdditionalFields(!showAdditionalFields);
   };
 
   return (
@@ -96,7 +107,7 @@ const CreateEventPage = () => {
           {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">city:</label>
+          <label className="block text-sm font-medium text-gray-700">City:</label>
           <input
             type="text"
             {...register("city")}
@@ -174,6 +185,60 @@ const CreateEventPage = () => {
 
         <div>
           <button
+            type="button"
+            onClick={toggleAdditionalFields}
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          >
+            {showAdditionalFields ? 'Hide Additional Fields' : 'Show Additional Fields'}
+          </button>
+        </div>
+
+        {showAdditionalFields && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Type of Competition:</label>
+              <input
+                type="text"
+                {...register("typeOfCompetition")}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.typeOfCompetition && <p className="text-red-500 text-sm">{errors.typeOfCompetition.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Date of Result:</label>
+              <input
+                type="date"
+                {...register("dateOfResult")}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.dateOfResult && <p className="text-red-500 text-sm">{errors.dateOfResult.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Amount of Winner:</label>
+              <input
+                type="number"
+                {...register("amountOfWinner", { valueAsNumber: true })}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.amountOfWinner && <p className="text-red-500 text-sm">{errors.amountOfWinner.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Winner Email:</label>
+              <input
+                type="email"
+                {...register("winnerEmail")}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.winnerEmail && <p className="text-red-500 text-sm">{errors.winnerEmail.message}</p>}
+            </div>
+          </>
+        )}
+
+        <div>
+          <button
             type="submit"
             disabled={isSubmitting}
             className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -187,4 +252,4 @@ const CreateEventPage = () => {
 };
 
 export default CreateEventPage;
-
+z
