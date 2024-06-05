@@ -53,7 +53,7 @@ const CreateEventPage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md min-h-screen">
       <ToastContainer />
       <h2 className="text-2xl font-bold mb-4">Create Event</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

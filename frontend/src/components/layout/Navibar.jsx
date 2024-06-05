@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 const initialNavigation = [
-  { name: "Dashboard", href: "#", current: true },
+  { name: "Dashboard", href: "/", current: true },
   { name: "Team", href: "#", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Your Events", href: "/getRegisteredEvents/USER_ID", current: false },
@@ -63,7 +63,7 @@ export default function Navibar() {
   };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-900">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

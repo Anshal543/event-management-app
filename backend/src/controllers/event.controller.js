@@ -216,3 +216,5 @@ export const getRegisteredUsers = async (req, res, next) => {
         next(error)
     }
 }
+
+// handle when user wants to unregister from the event

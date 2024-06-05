@@ -18,7 +18,7 @@ const GetRegisteredEvents = () => {
     if (eventsError) return <div>Error: {eventsError}</div>;
 
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md min-h-screen">
             <h2 className="text-3xl font-bold mb-4">Your Registered Events</h2>
             {events.length > 0 ? (
                 events.map(event => (

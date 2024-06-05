@@ -15,6 +15,7 @@ import SingleEventPage from "./pages/SingleEventPage";
 import GetRegisterEvent from "./pages/GetRegisterEvent";
 import SignUpPage from "./pages/SignUpPage";
 import UpdateEventPage from "./pages/UpdateEventPage";
+import HeroPage from "./pages/HeroPage";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         <ToastContainer />
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/hero" element={<HeroPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUpPage />} />
           <Route path="/create-event" element={<CreateEventPage />} />
