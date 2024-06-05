@@ -67,7 +67,7 @@ const MainPage = () => {
                   alt={event.title}
                 />
                 <div className="px-6 py-4">
-                  <div className="font-bold text-xl mb-2 truncate">
+                  <div className="font-bold text-xl mb-2 truncate capitalize">
                     {event.title}
                   </div>
                   <p className="text-gray-700 text-base mb-4 truncate">

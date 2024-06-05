@@ -1,22 +1,44 @@
 import { Event } from "../models/event.model.js";
 import { User } from "../models/user.model.js";
 import { customError } from "../utils/customError.js";
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
-
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const createEvent = async (req, res, next) => {
-    const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city } = req.body;
+    const {
+        title,
+        description,
+        typeOfEvent,
+        location,
+        registrationFee,
+        registrationStart,
+        startOfEvent,
+        endOfEvent,
+        timeOfEvent,
+        city,
+        dateOfResult,
+        amountOfWinner,
+        typeOfCompetition,
+    } = req.body;
 
-
-    if ([title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city].some(field => field?.trim() === "")) {
+    if (
+        [
+            title,
+            description,
+            typeOfEvent,
+            location,
+            registrationFee,
+            registrationStart,
+            startOfEvent,
+            endOfEvent,
+            timeOfEvent,
+            city,
+        ].some((field) => field?.trim() === "")
+    ) {
         return next(customError(400, "All fields are required!"));
     }
     try {
         const event = await Event.findOne({
-            $or: [
-                { title: { $regex: title, $options: 'i' } }
-            ]
+            $or: [{ title: { $regex: title, $options: "i" } }],
         });
         if (event) {
             return next(customError(400, "Event already exists!"));
@@ -28,11 +50,10 @@ export const createEvent = async (req, res, next) => {
         }
         const image = await uploadOnCloudinary(imageLocalPath);
 
-
         if (!image) {
             return next(customError(500, "Image upload failed!"));
         }
-     
+
         const newEvent = await Event.create({
             title,
             description,
@@ -45,23 +66,19 @@ export const createEvent = async (req, res, next) => {
             startOfEvent: new Date(startOfEvent).toISOString(),
             endOfEvent: new Date(endOfEvent).toISOString(),
             timeOfEvent,
+            dateOfResult: dateOfResult ? new Date(dateOfResult).toISOString() : null,
+            amountOfWinner: amountOfWinner || null,
+            typeOfCompetition: typeOfCompetition || null,
         });
 
-
-
-
         res.status(201).json(newEvent);
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-}
-
+};
 
 export const getEvents = async (req, res, next) => {
     try {
-
-
         // const { title } = req.body;
         // const events = await Event.find({
         //     $or: [
@@ -70,11 +87,10 @@ export const getEvents = async (req, res, next) => {
         // });
         const events = await Event.find();
         res.status(200).json(events);
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-}
+};
 
 export const getSingleEvent = async (req, res, next) => {
     try {
@@ -84,20 +100,19 @@ export const getSingleEvent = async (req, res, next) => {
             return next(customError(404, "Event not found!"));
         }
         res.status(200).json(event);
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-}
+};
 
 export const registerInEvent = async (req, res, next) => {
     try {
-        const { eventId, userId } = req.params
-        const event = await Event.findById(eventId).populate('participants')
+        const { eventId, userId } = req.params;
+        const event = await Event.findById(eventId).populate("participants");
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
-        const user = await User.findById(userId).populate('participatedEvents')
+        const user = await User.findById(userId).populate("participatedEvents");
         if (!user) {
             return next(customError(404, "User not found!"));
         }
@@ -109,31 +124,27 @@ export const registerInEvent = async (req, res, next) => {
         await event.save();
         await user.save();
         res.status(200).json({
-            message: 'User registered for the event successfully!',
+            message: "User registered for the event successfully!",
             event,
             user,
         });
-
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 export const getRegisteredEvents = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const user = await User.findById(userId).populate('participatedEvents');
+        const user = await User.findById(userId).populate("participatedEvents");
         if (!user) {
             return next(customError(404, "User not found!"));
         }
         res.status(200).json(user.participatedEvents);
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-
-}
-
+};
 
 export const deleteEvent = async (req, res, next) => {
     try {
@@ -143,38 +154,52 @@ export const deleteEvent = async (req, res, next) => {
             return next(customError(404, "Event not found!"));
         }
         res.status(200).json({
-            message: 'Event deleted successfully!',
+            message: "Event deleted successfully!",
         });
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-}
+};
+
 
 export const updateEvent = async (req, res, next) => {
+    const {
+        title,
+        description,
+        typeOfEvent,
+        location,
+        registrationFee,
+        registrationStart,
+        startOfEvent,
+        endOfEvent,
+        timeOfEvent,
+        city,
+        dateOfResult,
+        amountOfWinner,
+        typeOfCompetition,
+        winnerEmail
+    } = req.body;
+
     const { id } = req.params;
-    const { title, description, typeOfEvent, location, registrationFee, registrationStart, startOfEvent, endOfEvent, timeOfEvent, city } = req.body;
 
     try {
-        const event = await Event.findById(id);
-        if (!event) {
-            return next(customError(404, "Event not found!"));
-        }
+        const updateData = {};
 
-        let updatedData = {
-            title,
-            description,
-            typeOfEvent,
-            location,
-            registrationFee,
-            registrationStart: new Date(registrationStart).toISOString(),
-            startOfEvent: new Date(startOfEvent).toISOString(),
-            endOfEvent: new Date(endOfEvent).toISOString(),
-            timeOfEvent,
-            city,
-        };
+        if (title) updateData.title = title;
+        if (description) updateData.description = description;
+        if (typeOfEvent) updateData.typeOfEvent = typeOfEvent;
+        if (location) updateData.location = location;
+        if (registrationFee !== undefined) updateData.registrationFee = registrationFee;
+        if (registrationStart) updateData.registrationStart = new Date(registrationStart).toISOString();
+        if (startOfEvent) updateData.startOfEvent = new Date(startOfEvent).toISOString();
+        if (endOfEvent) updateData.endOfEvent = new Date(endOfEvent).toISOString();
+        if (timeOfEvent) updateData.timeOfEvent = timeOfEvent;
+        if (city) updateData.city = city;
+        if (dateOfResult) updateData.dateOfResult = new Date(dateOfResult).toISOString();
+        if (amountOfWinner !== undefined) updateData.amountOfWinner = amountOfWinner;
+        if (typeOfCompetition) updateData.typeOfCompetition = typeOfCompetition;
 
-        // Handle image upload if an image is provided
+        // Handle image upload if provided
         if (req.files?.image) {
             const imageLocalPath = req.files.image[0].path;
             const image = await uploadOnCloudinary(imageLocalPath);
@@ -183,38 +208,53 @@ export const updateEvent = async (req, res, next) => {
                 return next(customError(500, "Image upload failed!"));
             }
 
-            // Remove the old image if it exists and update with the new one
-            if (event.image) {
-                // Add your logic to delete the old image from Cloudinary
-            }
-
-            updatedData.image = image.url;
-
-            // Clean up local file after upload
-            // await fs.unlink(imageLocalPath);
+            updateData.image = image.url;
         }
 
-        const updatedEvent = await Event.findByIdAndUpdate(id, updatedData, { new: true });
+        // Add winner by email logic
+        if (winnerEmail) {
+            const user = await User.findOne({ email: winnerEmail });
+            if (!user) {
+                return next(customError(404, "User not found!"));
+            }
+
+            // Using $addToSet to avoid duplicates
+            updateData.$addToSet = { winner: user._id };
+        }
+
+        // Update the event
+        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner');
+
+        if (!updatedEvent) {
+            return next(customError(404, "Event not found!"));
+        }
+
         res.status(200).json(updatedEvent);
     } catch (error) {
         next(error);
     }
 };
 
+
+
+
+
+
+
+
 // create an api when give admin all the users who are registered in the event
 
 export const getRegisteredUsers = async (req, res, next) => {
     try {
         const { eventId } = req.params;
-        const event = await Event.findById(eventId).populate('participants');
+        const event = await Event.findById(eventId).populate("participants");
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
         res.status(200).json(event.participants);
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }
-}
+};
 
 // handle when user wants to unregister from the event

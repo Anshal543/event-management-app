@@ -70,7 +70,6 @@ const eventSchema = new Schema(
 
         amountOfWinner: {
             type: Number,
-            default: 0,
         },
         typeOfCompetition: {
             type: String,
