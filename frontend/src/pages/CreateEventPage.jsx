@@ -18,14 +18,13 @@ const eventSchema = z.object({
   startOfEvent: z.string().nonempty("Start of Event is required"),
   endOfEvent: z.string().nonempty("End of Event is required"),
   timeOfEvent: z.string().nonempty("Time of Event is required"),
-  image: z
-    .instanceof(File)
-    .refine((file) => file.size > 0, "Image is required"),
+  image: z.instanceof(File).refine((file) => file.size > 0, "Image is required"),
   typeOfCompetition: z.string().optional(),
   dateOfResult: z.string().optional(),
-  amountOfWinner: z.number().optional(),
-  winnerEmail: z.string().optional(),
+  amountOfWinner: z.string().optional(),
+  winner: z.string().optional(),
 });
+
 
 const CreateEventPage = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({
@@ -219,7 +218,7 @@ const CreateEventPage = () => {
               <label className="block text-sm font-medium text-gray-700">Amount of Winner:</label>
               <input
                 type="number"
-                {...register("amountOfWinner", { valueAsNumber: true })}
+                {...register("amountOfWinner")}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
               {errors.amountOfWinner && <p className="text-red-500 text-sm">{errors.amountOfWinner.message}</p>}
@@ -229,10 +228,10 @@ const CreateEventPage = () => {
               <label className="block text-sm font-medium text-gray-700">Winner Email:</label>
               <input
                 type="email"
-                {...register("winnerEmail")}
+                {...register("winner")}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-              {errors.winnerEmail && <p className="text-red-500 text-sm">{errors.winnerEmail.message}</p>}
+              {errors.winner && <p className="text-red-500 text-sm">{errors.winner.message}</p>}
             </div>
           </>
         )}

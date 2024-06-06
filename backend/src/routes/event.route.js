@@ -21,7 +21,7 @@ router.route("/event/:id").get(getSingleEvent);
 router.route("/evt/:eventId/register/:userId").post(registerInEvent);
 router.route("/getRegisteredEvents/:userId").get(getRegisteredEvents);
 router.route("/delete/:id").delete(verifyToken, verifyAdmin, deleteEvent);
-router.route("/update/:id").put(verifyToken, verifyAdmin, upload.fields([
+router.route("/update/:id").patch(verifyToken, verifyAdmin, upload.fields([
     {
         name: "image", maxCount: 1
     }

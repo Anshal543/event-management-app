@@ -16,6 +16,10 @@ const UpdateEventPage = () => {
     startOfEvent: '',
     endOfEvent: '',
     timeOfEvent: '',
+    dateOfResult: '',
+    amountOfWinner: '',
+    typeOfCompetition: '',
+    winner: '',
     image: ''
   });
   const [loading, setLoading] = useState(false);
@@ -27,14 +31,12 @@ const UpdateEventPage = () => {
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/events/event/${id}`);
         const eventData = response.data;
-        // Convert date strings to the format required by the input elements
         eventData.registrationStart = eventData.registrationStart ? eventData.registrationStart.split('T')[0] : '';
         eventData.startOfEvent = eventData.startOfEvent ? eventData.startOfEvent.split('T')[0] : '';
         eventData.endOfEvent = eventData.endOfEvent ? eventData.endOfEvent.split('T')[0] : '';
-        
-        // eventData.timeOfEvent = eventData.timeOfEvent ? eventData.timeOfEvent.split('T')[1].split('.')[0] : '';
+        eventData.dateOfResult = eventData.dateOfResult ? eventData.dateOfResult.split('T')[0] : '';
         setEvent(eventData);
-        setImagePreview(eventData.image); // Set the initial image preview
+        setImagePreview(eventData.image);
       } catch (err) {
         setError('Could not fetch event data.');
       }
@@ -48,9 +50,9 @@ const UpdateEventPage = () => {
       const file = files[0];
       setEvent((prevEvent) => ({
         ...prevEvent,
-        image: file // Store the selected file
+        image: file
       }));
-      setImagePreview(URL.createObjectURL(file)); // Set the image preview
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setEvent((prevEvent) => ({
         ...prevEvent,
@@ -65,7 +67,7 @@ const UpdateEventPage = () => {
     try {
       const formData = new FormData();
       for (const key in event) {
-        formData.append(key, event[key]);
+        if (event[key]) formData.append(key, event[key]);
       }
       await axios.put(`http://localhost:8080/api/v1/events/update/${id}`, formData, {
         headers: {
@@ -198,6 +200,53 @@ const UpdateEventPage = () => {
             value={event.timeOfEvent}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="dateOfResult" className="block text-gray-700 font-bold mb-2">Date of Result</label>
+          <input
+            type="date"
+            id="dateOfResult"
+            name="dateOfResult"
+            value={event.dateOfResult}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="amountOfWinner" className="block text-gray-700 font-bold mb-2">Amount of Winner</label>
+          <input
+            type="number"
+            id="amountOfWinner"
+            name="amountOfWinner"
+            value={event.amountOfWinner}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Amount of Winner"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="typeOfCompetition" className="block text-gray-700 font-bold mb-2">Type of Competition</label>
+          <input
+            type="text"
+            id="typeOfCompetition"
+            name="typeOfCompetition"
+            value={event.typeOfCompetition}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Type of Competition"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="winnerEmail" className="block text-gray-700 font-bold mb-2">Winner Email</label>
+          <input
+            type="email"
+            id="winner"
+            name="winner"
+            value={event.winner}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Winner Email"
           />
         </div>
         <div className="mb-4">

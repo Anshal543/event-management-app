@@ -85,7 +85,7 @@ export const getEvents = async (req, res, next) => {
         //         { title: { $regex: title, $options: 'i' } }
         //     ]
         // });
-        const events = await Event.find();
+        const events = await Event.find().populate("winner", "_id username email")
         res.status(200).json(events);
     } catch (error) {
         next(error);
@@ -160,6 +160,95 @@ export const deleteEvent = async (req, res, next) => {
         next(error);
     }
 };
+// export const updateEvent = async (req, res, next) => {
+//     const {
+//         title,
+//         description,
+//         typeOfEvent,
+//         location,
+//         registrationFee,
+//         registrationStart,
+//         startOfEvent,
+//         endOfEvent,
+//         timeOfEvent,
+//         city,
+//         dateOfResult,
+//         amountOfWinner,
+//         typeOfCompetition,
+//         winner
+//     } = req.body;
+
+//     const { id } = req.params;
+
+//     try {
+//         const updateData = {};
+
+//         if (title) updateData.title = title;
+//         if (description) updateData.description = description;
+//         if (typeOfEvent) updateData.typeOfEvent = typeOfEvent;
+//         if (location) updateData.location = location;
+//         if (registrationFee !== undefined) updateData.registrationFee = registrationFee;
+//         if (registrationStart) updateData.registrationStart = new Date(registrationStart).toISOString();
+//         if (startOfEvent) updateData.startOfEvent = new Date(startOfEvent).toISOString();
+//         if (endOfEvent) updateData.endOfEvent = new Date(endOfEvent).toISOString();
+//         if (timeOfEvent) updateData.timeOfEvent = timeOfEvent;
+//         if (city) updateData.city = city;
+//         if (dateOfResult) updateData.dateOfResult = new Date(dateOfResult).toISOString();
+//         if (amountOfWinner !== undefined) updateData.amountOfWinner = amountOfWinner;
+//         if (typeOfCompetition) updateData.typeOfCompetition = typeOfCompetition;
+
+//         // Handle image upload if provided
+//         if (req.files?.image) {
+//             const imageLocalPath = req.files.image[0].path;
+//             const image = await uploadOnCloudinary(imageLocalPath);
+
+//             if (!image) {
+//                 return next(customError(500, "Image upload failed!"));
+//             }
+
+//             updateData.image = image.url;
+//         }
+
+//         // Handle winner update separately
+//         if (winner) {
+//             const user = await User.findOne({ email: winner });
+//             if (!user) {
+//                 return next(customError(404, "User not found!"));
+//             }
+
+//             // Update event with new data and add winner using $addToSet
+//             const updatedEvent = await Event.findByIdAndUpdate(
+//                 id,
+//                 {
+//                     updateData,
+//                      winner: user
+//                 },
+//                 { new: true }
+//             ).populate('winner');
+
+//             if (!updatedEvent) {
+//                 return next(customError(404, "Event not found!"));
+//             }
+
+//             return res.status(200).json(updatedEvent);
+//         } else {
+//             // Update event with new data
+//             const updatedEvent = await Event.findByIdAndUpdate(
+//                 id,
+//                 { $set: updateData },
+//                 { new: true }
+//             ).populate('winner');
+
+//             if (!updatedEvent) {
+//                 return next(customError(404, "Event not found!"));
+//             }
+
+//             return res.status(200).json(updatedEvent);
+//         }
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 
 
 export const updateEvent = async (req, res, next) => {
@@ -177,7 +266,7 @@ export const updateEvent = async (req, res, next) => {
         dateOfResult,
         amountOfWinner,
         typeOfCompetition,
-        winnerEmail
+        winner
     } = req.body;
 
     const { id } = req.params;
@@ -212,18 +301,24 @@ export const updateEvent = async (req, res, next) => {
         }
 
         // Add winner by email logic
-        if (winnerEmail) {
-            const user = await User.findOne({ email: winnerEmail });
+        if (winner) {
+            const user = await User.findOne({ email: winner});
             if (!user) {
                 return next(customError(404, "User not found!"));
             }
 
             // Using $addToSet to avoid duplicates
-            updateData.$addToSet = { winner: user };
+            updateData.winner = user 
+            // updateData.user = user
         }
+        // const winnerDetails = await User.findById(updateData.winner);
+        // if (!winnerDetails) {
+        //     return next(customError(404, "Winner not found!"));
+        // }
 
         // Update the event
-        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner');
+        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner',"_id username email");
+        console.log(updatedEvent);
 
         if (!updatedEvent) {
             return next(customError(404, "Event not found!"));
@@ -234,13 +329,6 @@ export const updateEvent = async (req, res, next) => {
         next(error);
     }
 };
-
-
-
-
-
-
-
 
 // create an api when give admin all the users who are registered in the event
 

@@ -51,7 +51,7 @@ const MainPage = () => {
 
             return (
               <div
-                key={event.id}
+                key={event._id}
                 className={`relative max-w-sm rounded overflow-hidden shadow-lg m-4 ${
                   events.length === 1 && index === 0 ? "self-start" : ""
                 }`}
