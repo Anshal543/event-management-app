@@ -73,7 +73,18 @@ const MainPage = () => {
                   <p className="text-gray-700 text-base mb-4 truncate">
                     {event.description}
                   </p>
-                  <p className="text-gray-500 capitalize font-bold text-lg">{event.city}</p>
+                  <p className="text-gray-500 capitalize font-bold text-lg">
+                    {event.city}
+                  </p>
+                  <div className="flex justify-between">
+                    <p className="text-gray-500 capitalize font-bold text-lg">
+                      {event?.typeOfCompetition}
+                    </p>
+                    {/* <p className="text-gray-500 capitalize font-bold text-lg">{event?.amountOfWinner}</p> */}
+                    <p className="text-gray-500 capitalize font-bold text-lg">
+                      {event?.winner[0]?.username}
+                    </p>
+                  </div>
                 </div>
                 <div className="px-6 pt-4 pb-2">
                   <button

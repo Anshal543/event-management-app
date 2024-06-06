@@ -219,7 +219,7 @@ export const updateEvent = async (req, res, next) => {
             }
 
             // Using $addToSet to avoid duplicates
-            updateData.$addToSet = { winner: user._id };
+            updateData.$addToSet = { winner: user };
         }
 
         // Update the event
