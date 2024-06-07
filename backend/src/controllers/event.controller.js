@@ -95,7 +95,7 @@ export const getEvents = async (req, res, next) => {
 export const getSingleEvent = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const event = await Event.findById(id);
+        const event = await Event.findById(id).populate("winner", "_id username email");
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
