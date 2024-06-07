@@ -19,7 +19,7 @@ const initialNavigation = [
   { name: "Home", href: "/", current: false },
   { name: "All Events", href: "/all-events", current: true },
   { name: "Your Events", href: "/getRegisteredEvents/USER_ID", current: false },
-  { name: "Create Event", href: "/create-event", current: false },
+  // { name: "Create Event", href: "/create-event", current: false },
 ];
 
 function classNames(...classes) {
@@ -28,23 +28,29 @@ function classNames(...classes) {
 
 export default function Navibar() {
   const userId = useSelector((state) => state.auth.userInfo?.rest?._id);
+  const isAdmin = useSelector((state) => state.auth.userInfo?.rest?.isAdmin);
+
   const dispatch = useDispatch();
 
   const [navigation, setNavigation] = useState(initialNavigation);
 
   useEffect(() => {
-    // Update navigation when userId changes and is not null
+    // Update navigation when userId or isAdmin changes
     if (userId) {
-      setNavigation(
-        navigation.map((item) => ({
-          ...item,
-          href: item.href.includes("USER_ID")
-            ? item.href.replace("USER_ID", userId)
-            : item.href,
-        }))
-      );
+      let updatedNavigation = initialNavigation.map((item) => ({
+        ...item,
+        href: item.href.includes("USER_ID")
+          ? item.href.replace("USER_ID", userId)
+          : item.href,
+      }));
+
+      if (isAdmin) {
+        updatedNavigation.push({ name: "Create Event", href: "/create-event", current: false });
+      }
+
+      setNavigation(updatedNavigation);
     }
-  }, [userId]);
+  }, [userId, isAdmin]);
 
   const handleLogout = async () => {
     try {
