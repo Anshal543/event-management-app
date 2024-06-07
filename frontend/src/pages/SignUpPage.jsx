@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { z } from "zod";
@@ -46,7 +46,7 @@ const SignUpPage = () => {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+          {/* <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign up to create your account</          h2>
         </div>
 
@@ -94,7 +94,7 @@ const SignUpPage = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?{" "}
-            <a href="/sign-in" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Login here</a>
+            <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Login here</Link>
           </p>
         </div>
       </div>

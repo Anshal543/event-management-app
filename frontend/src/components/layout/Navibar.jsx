@@ -195,12 +195,12 @@ export default function Navibar() {
                     >
                       login
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => (window.location.href = "/register")}
                       className="text-white font-bold p-2 rounded-md bg-blue-800 hover:bg-blue-700"
                     >
                       signup
-                    </button>
+                    </button> */}
                   </>
                 )}
               </div>

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getEvents, selectEvents } from "../features/events/eventSlice";
 import { useNavigate } from "react-router-dom";
+import 'tailwindcss/tailwind.css';
 
 const MainPage = () => {
   const events = useSelector(selectEvents);
@@ -16,8 +17,10 @@ const MainPage = () => {
     navigate(`/single-event/${id}`);
   };
 
+  const currentDate = new Date();
+
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gray-100 pt-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 pt-4 pb-16">
       {!events.length ? (
         <div className="flex flex-col items-center">
           <svg
@@ -43,22 +46,25 @@ const MainPage = () => {
           <div className="text-gray-700 text-lg">Loading...</div>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-start sm:justify-center">
-          {events.map((event, index) => {
-            const currentDate = new Date();
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-4 pb-16 mt-10">
+          {events.map((event) => {
             const eventDate = new Date(event.startOfEvent);
             const isUpcoming = currentDate < eventDate;
+            const isActive = currentDate >= eventDate && currentDate <= new Date(event.endOfEvent);
 
             return (
               <div
                 key={event._id}
-                className={`relative max-w-sm rounded overflow-hidden shadow-lg m-4 ${
-                  events.length === 1 && index === 0 ? "self-start" : ""
-                }`}
+                className="relative max-w-sm rounded overflow-hidden shadow-lg bg-white"
               >
                 {isUpcoming && (
                   <div className="absolute top-0 left-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-br-lg">
                     Upcoming
+                  </div>
+                )}
+                {isActive && !isUpcoming && (
+                  <div className="absolute top-0 left-0 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-br-lg">
+                    Active
                   </div>
                 )}
                 <img
@@ -73,17 +79,25 @@ const MainPage = () => {
                   <p className="text-gray-700 text-base mb-4 truncate">
                     {event.description}
                   </p>
-                  <p className="text-gray-500 capitalize font-bold text-lg">
-                    {event.city}
-                  </p>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center mb-2">
                     <p className="text-gray-500 capitalize font-bold text-lg">
-                      {event?.typeOfCompetition}
+                      {event.city}
                     </p>
-                    {/* <p className="text-gray-500 capitalize font-bold text-lg">{event?.amountOfWinner}</p> */}
                     <p className="text-gray-500 capitalize font-bold text-lg">
+                      Registration Fee: {event.registrationFee}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    {event.typeOfCompetition ? (
+                      <p className="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-sm font-semibold capitalize">
+                        {event?.typeOfCompetition}
+                      </p>
+                    ) : (
+                      <div className="py-1 px-3 text-sm">&nbsp;</div>
+                    )}
+                   {event?.winner[0]?.username && <p className="bg-gray-100 text-gray-800 py-1 px-3 rounded-full text-sm font-semibold capitalize">
                       {event?.winner[0]?.username}
-                    </p>
+                    </p>}
                   </div>
                 </div>
                 <div className="px-6 pt-4 pb-2">

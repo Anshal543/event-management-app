@@ -22,7 +22,7 @@ const eventSchema = z.object({
   typeOfCompetition: z.string().optional(),
   dateOfResult: z.string().optional(),
   amountOfWinner: z.string().optional(),
-  winner: z.string().optional(),
+  // winner: z.string().optional(),
 });
 
 
@@ -224,7 +224,7 @@ const CreateEventPage = () => {
               {errors.amountOfWinner && <p className="text-red-500 text-sm">{errors.amountOfWinner.message}</p>}
             </div>
 
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">Winner Email:</label>
               <input
                 type="email"
@@ -232,7 +232,7 @@ const CreateEventPage = () => {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
               {errors.winner && <p className="text-red-500 text-sm">{errors.winner.message}</p>}
-            </div>
+            </div> */}
           </>
         )}
 

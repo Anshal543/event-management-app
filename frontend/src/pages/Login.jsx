@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, selectUserInfo } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
@@ -58,20 +58,20 @@ const Login = () => {
   };
 
   return (
-    <div className="m-h-screen">
+    <div className="min-h-screen flex flex-col justify-between">
       {loading && (
         <div className="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50">
           Loading...
         </div>
       )}
 
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex flex-col justify-center flex-grow px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
+          {/* <img
             className="mx-auto h-10 w-auto"
             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
             alt="Your Company"
-          />
+          /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
           </h2>
@@ -152,15 +152,18 @@ const Login = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}
-            <a
-              href="#"
+            <Link
+              to={"/register"}
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Start a 14 day free trial
-            </a>
+              Sign up now
+            </Link>
           </p>
         </div>
       </div>
+      {/* <footer className="bg-gray-800 text-white text-center py-4">
+        © 2024 Your Company. All rights reserved.
+      </footer> */}
     </div>
   );
 };
