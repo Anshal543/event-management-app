@@ -39,8 +39,8 @@ const App = () => {
         <Navibar />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/hero" element={<HeroPage />} />
+          <Route path="/" element={<HeroPage />} />
+          <Route path="/all-events" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUpPage />} />
           <Route path="/create-event" element={<CreateEventPage />} />

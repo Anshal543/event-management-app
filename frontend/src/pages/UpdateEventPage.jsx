@@ -69,7 +69,7 @@ const UpdateEventPage = () => {
       for (const key in event) {
         if (event[key]) formData.append(key, event[key]);
       }
-      await axios.put(`http://localhost:8080/api/v1/events/update/${id}`, formData, {
+      await axios.patch(`http://localhost:8080/api/v1/events/update/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
