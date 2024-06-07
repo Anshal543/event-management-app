@@ -1,8 +1,10 @@
  + Filter by city and type of event
 + search at top of event page below navbar
-+ no of uesr register in event
-+ Leave event api
++ no of uesr register in event and create get registerd users
+<!-- + Leave event api -->
 + your events
++ forget password
++ work on landing page
 
 // event id 666054f51ffdff7fb7df19fa
 

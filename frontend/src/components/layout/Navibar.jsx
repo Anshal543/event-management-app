@@ -11,8 +11,9 @@ import {
   Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import axios from "axios";
+import { logout } from "../../features/auth/authSlice";
 
 const initialNavigation = [
   { name: "Home", href: "/", current: false },
@@ -27,6 +28,7 @@ function classNames(...classes) {
 
 export default function Navibar() {
   const userId = useSelector((state) => state.auth.userInfo?.rest?._id);
+  const dispatch = useDispatch();
 
   const [navigation, setNavigation] = useState(initialNavigation);
 
@@ -47,11 +49,11 @@ export default function Navibar() {
   const handleLogout = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_AUTH_URL}/logout`
+        `${import.meta.env.VITE_BACKEND_AUTH_URL}/delete`
       );
       if (response.status === 200) {
         dispatch(logout());
-        window.location.reload();
+        window.location.href = "/login";
       } else {
         // Handle logout failure
         console.error("Logout failed:", response.statusText);

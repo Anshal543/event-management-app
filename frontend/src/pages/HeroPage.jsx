@@ -27,7 +27,7 @@ const HeroSection = () => {
         <p className="text-lg mb-8 text-gray-300">
           Discover the ultimate solution for all your event management needs. Our platform provides top-notch services to ensure your events are a resounding success. From planning to execution, we handle it all with precision and professionalism.
         </p>
-        <Link to="/" className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300" >
+        <Link to="/all-events" className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300" >
           Get Started
         </Link>
       </div>
