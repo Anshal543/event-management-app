@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-    createEvent, getEvents, getSingleEvent, registerInEvent, getRegisteredEvents, deleteEvent, updateEvent, getRegisteredUsers
+    createEvent, getEvents, getSingleEvent, registerInEvent, getRegisteredEvents, deleteEvent, updateEvent, getRegisteredUsers, leaveEvent
 } from '../controllers/event.controller.js';
 import { upload } from '../middlewares/multer.middleware.js';
 import { verifyAdmin } from '../middlewares/admin.middleware.js';
@@ -27,6 +27,7 @@ router.route("/update/:id").patch(verifyToken, verifyAdmin, upload.fields([
     }
 ]), updateEvent);
 router.route("/getRegisteredUsers/:eventId").get(getRegisteredUsers);
+router.route("/evt/:eventId/leave/:userId").delete(leaveEvent);
 
 
 export default router;

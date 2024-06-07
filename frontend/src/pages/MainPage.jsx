@@ -212,18 +212,19 @@ const MainPage = () => {
                     <p className="text-gray-500 capitalize font-bold text-lg">
                       {event.city}
                     </p>
-                    <p className="text-gray-500 capitalize font-bold text-lg">
+                  {event.registrationFee>0 &&  <p className="text-gray-500 capitalize font-bold text-lg">
                       Registration Fee: {event.registrationFee}
-                    </p>
+                    </p>}
                   </div>
                 </div>
-                <div className="px-6 pt-4 pb-2">
+                <div className="px-6 pt-4 pb-2 flex justify-between items-center">
                   <button
                     onClick={() => handleViewDetails(event._id)}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
                     View Details
                   </button>
+                  {event.participants.length>0 &&<p className="text-gray-500 capitalize font-bold text-lg" >Registerd:{event.participants.length}</p>}
                 </div>
               </div>
             );

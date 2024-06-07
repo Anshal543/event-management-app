@@ -302,13 +302,13 @@ export const updateEvent = async (req, res, next) => {
 
         // Add winner by email logic
         if (winner) {
-            const user = await User.findOne({ email: winner});
+            const user = await User.findOne({ email: winner });
             if (!user) {
                 return next(customError(404, "User not found!"));
             }
 
             // Using $addToSet to avoid duplicates
-            updateData.winner = user 
+            updateData.winner = user
             // updateData.user = user
         }
         // const winnerDetails = await User.findById(updateData.winner);
@@ -317,7 +317,7 @@ export const updateEvent = async (req, res, next) => {
         // }
 
         // Update the event
-        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner',"_id username email");
+        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner', "_id username email");
         console.log(updatedEvent);
 
         if (!updatedEvent) {
@@ -346,3 +346,103 @@ export const getRegisteredUsers = async (req, res, next) => {
 };
 
 // handle when user wants to unregister from the event
+
+// export const leaveEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+//         if (!event.participants.includes(userId)) {
+//             return next(customError(400, "Not registered in the event!"));
+//         }
+//         event.participants = event.participants.filter((id) => id.toString() !== userId);
+//         user.participatedEvents = user.participatedEvents.filter((id) => id.toString() !== eventId);
+//         await event.save();
+//         await user.save();
+//         res.status(200).json({
+//             message: "User left the event successfully!",
+//             event,
+//             user,
+//         });
+//     }
+//     catch (error) {
+//         next(error);
+//     }
+// }
+//do this with find by id and update or delelte
+// export const leaveEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+//         if (!event.participants.includes(userId)) {
+//             return next(customError(400, "Not registered in the event!"));
+//         }
+//         const updatedEvent = await Event.findByIdAndUpdate(eventId, { $pull: { participants: userId } }, { new: true });
+//         const updatedUser = await User.findByIdAndUpdate(userId, { $pull: { participatedEvents: eventId } }, { new: true });
+//         res.status(200).json({
+//             message: "User left the event successfully!",
+//             event: updatedEvent,
+//             user: updatedUser,
+//         });
+//     }
+//     catch (error) {
+//         next(error);
+//     }
+// }
+
+export const leaveEvent = async (req, res, next) => {
+    try {
+        const { eventId, userId } = req.params;
+
+        // Find the event and check if it exists
+        const event = await Event.findById(eventId).populate("participants");
+        if (!event) {
+            return next(customError(404, "Event not found!"));
+        }
+
+        // Find the user and check if it exists
+        const user = await User.findById(userId).populate("participatedEvents");
+        if (!user) {
+            return next(customError(404, "User not found!"));
+        }
+
+        // Check if the user is registered for the event
+        if (!event.participants.some(participant => participant._id.equals(userId))) {
+            return next(customError(400, "Not registered in the event!"));
+        }
+
+        // Remove user from event participants and event from user's participated events
+        const updatedEvent = await Event.findByIdAndUpdate(
+            eventId, 
+            { $pull: { participants: userId } }, 
+            { new: true }
+        ).populate("participants");
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, 
+            { $pull: { participatedEvents: eventId } }, 
+            { new: true }
+        ).populate("participatedEvents");
+
+        res.status(200).json({
+            message: "User left the event successfully!",
+            event: updatedEvent,
+            user: updatedUser,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
