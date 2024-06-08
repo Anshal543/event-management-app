@@ -33,6 +33,8 @@ const userSchema = new Schema({
     participatedEvents: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
     ],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 
 
 }, { timestamps: true });
