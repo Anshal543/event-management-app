@@ -4,7 +4,10 @@
 <!-- + Leave event api -->
 + your events
 + forget password
-+ work on landing page
+<!-- + work on landing page -->
++ work on footer and header
++ work on page not found and footer
++ handle image at create and update event page
 
 // event id 666054f51ffdff7fb7df19fa
 

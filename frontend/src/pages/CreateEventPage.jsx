@@ -45,7 +45,7 @@ const CreateEventPage = () => {
       const response = await axios.post('http://localhost:8080/api/v1/events/create', data);
       toast.success('Event created successfully!');
       setTimeout(() => {
-        navigate('/');
+        navigate('/all-events');
       }, 2000); // navigate to home page after 2 seconds
     } catch (error) {
       toast.error('Error creating event!');
