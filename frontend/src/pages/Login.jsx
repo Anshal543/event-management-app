@@ -43,7 +43,7 @@ const Login = () => {
         `${import.meta.env.VITE_BACKEND_AUTH_URL}/login`,
         data
       );
-      console.log(response.data);
+      
       if (response.status === 200) {
         dispatch(login());
         setLoading(false);

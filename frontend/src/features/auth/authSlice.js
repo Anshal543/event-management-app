@@ -4,7 +4,6 @@ import axios from 'axios';
 export const login = createAsyncThunk('auth/login', async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_AUTH_URL}/auth`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -13,7 +12,6 @@ export const login = createAsyncThunk('auth/login', async () => {
 export const logout = createAsyncThunk('auth/logout', async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_AUTH_URL}/delete`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;

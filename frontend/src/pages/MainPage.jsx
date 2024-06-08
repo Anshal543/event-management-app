@@ -32,7 +32,7 @@ const MainPage = () => {
   ];
 
   // Log the events for debugging
-  console.log('Events:', events);
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 pt-4 pb-16">

@@ -4,7 +4,6 @@ import axios from 'axios';
 export const getEvents = createAsyncThunk('events/getEvents', async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/get`);
-        // console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -27,7 +26,6 @@ export const createEvent = createAsyncThunk('events/createEvent', async (event) 
 export const getSingleEvent = createAsyncThunk('events/getSingleEvent', async (id) => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/event/${id}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;
@@ -37,7 +35,6 @@ export const getSingleEvent = createAsyncThunk('events/getSingleEvent', async (i
 export const getRegisteredEvents = createAsyncThunk('events/getRegisteredEvents', async (userId) => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/getRegisteredEvents/${userId}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         return error.response.data;

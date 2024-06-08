@@ -320,7 +320,7 @@ export const getRegisteredEvents = async (req, res, next) => {
         if (!user) {
             return next(customError(404, "User not found!"));
         }
-        console.log(user.participatedEvents);
+        
         res.status(200).json(user.participatedEvents);
     } catch (error) {
         next(error);
@@ -410,7 +410,7 @@ export const updateEvent = async (req, res, next) => {
 
         // Update the event
         const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner', "_id username email");
-        console.log(updatedEvent);
+    
 
         if (!updatedEvent) {
             return next(customError(404, "Event not found!"));
@@ -429,7 +429,6 @@ export const getRegisteredUsers = async (req, res, next) => {
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
-        console.log(event.participants);
         res.status(200).json(event.participants);
     } catch (error) {
         next(error);

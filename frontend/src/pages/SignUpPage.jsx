@@ -28,7 +28,7 @@ const SignUpPage = () => {
     const { username, email, password, mobileNo } = data;
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_AUTH_URL}/register`, { username, email, password, mobileNo });
-      console.log(res.data);
+      
       if (res) {
         toast.success("Account created successfully", {
           position: "bottom-left",
