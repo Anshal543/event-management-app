@@ -41,6 +41,15 @@ export const getRegisteredEvents = createAsyncThunk('events/getRegisteredEvents'
     }
 });
 
+export const getEventBySearch = createAsyncThunk('events/getEventBySearch', async (search) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_EVENTS_URL}/search?q=/${search}`);
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+});
+
 const eventsSlice = createSlice({
     name: 'events',
     initialState: {
@@ -103,6 +112,20 @@ const eventsSlice = createSlice({
                 state.eventsLoading = false;
             })
             .addCase(getRegisteredEvents.rejected, (state, action) => {
+                state.eventsError = action.payload;
+                state.eventsLoading = false;
+            })
+
+            .addCase(getEventBySearch.pending, (state, action) => {
+                state.eventsLoading = true;
+                state.eventsError = null;
+            })
+            .addCase(getEventBySearch.fulfilled, (state, action) => {
+                state.events = action.payload;
+                state.eventsError = null;
+                state.eventsLoading = false;
+            })
+            .addCase(getEventBySearch.rejected, (state, action) => {
                 state.eventsError = action.payload;
                 state.eventsLoading = false;
             });

@@ -86,7 +86,23 @@ export const getEvents = async (req, res, next) => {
         //         { title: { $regex: title, $options: 'i' } }
         //     ]
         // });
-        const events = await Event.find().populate("winner", "_id username email")
+        const events = await Event.find().populate("winner", "_id username email");
+        res.status(200).json(events);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getEventBySearch = async (req, res, next) => {
+    try {
+        const { q } = req.query;
+        const events = await Event.find({
+            $or: [
+                { title: { $regex: q, $options: "i" } },
+                { city: { $regex: q, $options: "i" } },
+                { typeOfEvent: { $regex: q, $options: "i" } },
+            ],
+        });
         res.status(200).json(events);
     } catch (error) {
         next(error);
@@ -96,7 +112,10 @@ export const getEvents = async (req, res, next) => {
 export const getSingleEvent = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const event = await Event.findById(id).populate("winner", "_id username email");
+        const event = await Event.findById(id).populate(
+            "winner",
+            "_id username email"
+        );
         if (!event) {
             return next(customError(404, "Event not found!"));
         }
@@ -111,7 +130,10 @@ export const registerInEvent = async (req, res, next) => {
         const { eventId, userId } = req.params;
 
         // Ensure eventId and userId are valid ObjectIds
-        if (!mongoose.Types.ObjectId.isValid(eventId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        if (
+            !mongoose.Types.ObjectId.isValid(eventId) ||
+            !mongoose.Types.ObjectId.isValid(userId)
+        ) {
             return next(customError(400, "Invalid eventId or userId!"));
         }
 
@@ -126,7 +148,9 @@ export const registerInEvent = async (req, res, next) => {
         }
 
         // Check if the user is already registered in the event
-        const isUserRegistered = event.participants.some(participant => participant.equals(userId));
+        const isUserRegistered = event.participants.some((participant) =>
+            participant.equals(userId)
+        );
         if (isUserRegistered) {
             return next(customError(400, "Already registered!"));
         }
@@ -155,7 +179,7 @@ export const getRegisteredEvents = async (req, res, next) => {
         if (!user) {
             return next(customError(404, "User not found!"));
         }
-        
+
         res.status(200).json(user.participatedEvents);
     } catch (error) {
         next(error);
@@ -192,7 +216,7 @@ export const updateEvent = async (req, res, next) => {
         dateOfResult,
         amountOfWinner,
         typeOfCompetition,
-        winner
+        winner,
     } = req.body;
 
     const { id } = req.params;
@@ -204,14 +228,19 @@ export const updateEvent = async (req, res, next) => {
         if (description) updateData.description = description;
         if (typeOfEvent) updateData.typeOfEvent = typeOfEvent;
         if (location) updateData.location = location;
-        if (registrationFee !== undefined) updateData.registrationFee = registrationFee;
-        if (registrationStart) updateData.registrationStart = new Date(registrationStart).toISOString();
-        if (startOfEvent) updateData.startOfEvent = new Date(startOfEvent).toISOString();
+        if (registrationFee !== undefined)
+            updateData.registrationFee = registrationFee;
+        if (registrationStart)
+            updateData.registrationStart = new Date(registrationStart).toISOString();
+        if (startOfEvent)
+            updateData.startOfEvent = new Date(startOfEvent).toISOString();
         if (endOfEvent) updateData.endOfEvent = new Date(endOfEvent).toISOString();
         if (timeOfEvent) updateData.timeOfEvent = timeOfEvent;
         if (city) updateData.city = city;
-        if (dateOfResult) updateData.dateOfResult = new Date(dateOfResult).toISOString();
-        if (amountOfWinner !== undefined) updateData.amountOfWinner = amountOfWinner;
+        if (dateOfResult)
+            updateData.dateOfResult = new Date(dateOfResult).toISOString();
+        if (amountOfWinner !== undefined)
+            updateData.amountOfWinner = amountOfWinner;
         if (typeOfCompetition) updateData.typeOfCompetition = typeOfCompetition;
 
         // Handle image upload if provided
@@ -234,7 +263,7 @@ export const updateEvent = async (req, res, next) => {
             }
 
             // Using $addToSet to avoid duplicates
-            updateData.winner = user
+            updateData.winner = user;
             // updateData.user = user
         }
         // const winnerDetails = await User.findById(updateData.winner);
@@ -243,8 +272,9 @@ export const updateEvent = async (req, res, next) => {
         // }
 
         // Update the event
-        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, { new: true }).populate('winner', "_id username email");
-    
+        const updatedEvent = await Event.findByIdAndUpdate(id, updateData, {
+            new: true,
+        }).populate("winner", "_id username email");
 
         if (!updatedEvent) {
             return next(customError(404, "Event not found!"));
@@ -286,20 +316,22 @@ export const leaveEvent = async (req, res, next) => {
         }
 
         // Check if the user is registered for the event
-        if (!event.participants.some(participant => participant._id.equals(userId))) {
+        if (
+            !event.participants.some((participant) => participant._id.equals(userId))
+        ) {
             return next(customError(400, "Not registered in the event!"));
         }
 
         // Remove user from event participants and event from user's participated events
         const updatedEvent = await Event.findByIdAndUpdate(
-            eventId, 
-            { $pull: { participants: userId } }, 
+            eventId,
+            { $pull: { participants: userId } },
             { new: true }
         ).populate("participants");
 
         const updatedUser = await User.findByIdAndUpdate(
-            userId, 
-            { $pull: { participatedEvents: eventId } }, 
+            userId,
+            { $pull: { participatedEvents: eventId } },
             { new: true }
         ).populate("participatedEvents");
 
