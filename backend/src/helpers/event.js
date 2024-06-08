@@ -65,6 +65,240 @@ export const updateEvent = async (req, res, next) => {
 */
 
 
+// export const registerInEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+//         if (event.participants.includes(userId)) {
+//             return next(customError(400, "Already registered!"));
+//         }
+//         event.participants.push(userId);
+//         user.participatedEvents.push(eventId);
+//         await event.save();
+//         await user.save();
+//         res.status(200).json({
+//             message: "User registered for the event successfully!",
+//             event,
+//             user,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+// const registrationDates = {}; // In-memory storage for registration dates
+
+
+// export const registerInEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+//         if (event.participants.includes(userId)) {
+//             return next(customError(400, "Already registered!"));
+//         }
+        
+//         // Add the user to the event's participants and vice versa
+//         event.participants.push(userId);
+//         user.participatedEvents.push(eventId);
+        
+//         // Store the registration date in memory
+//         const registrationDate = new Date();
+//         if (!registrationDates[userId]) {
+//             registrationDates[userId] = {};
+//         }
+//         registrationDates[userId][eventId] = registrationDate;
+        
+//         await event.save();
+//         await user.save();
+        
+//         res.status(200).json({
+//             message: "User registered for the event successfully!",
+//             event,
+//             user,
+//             registrationDate
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+// export const registerInEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants.userId");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+//         const alreadyRegistered = event.participants.some(participant => participant.userId.toString() === userId);
+//         if (alreadyRegistered) {
+//             return next(customError(400, "Already registered!"));
+//         }
+
+//         // if (event.participants.includes(userId)) {
+//         //     return next(customError(400, "Already registered!"));
+//         // }
+//         const registrationDate = new Date();
+//         // Add the user to the event's participants and vice versa
+//         event.participants.push({userId, registrationDate});
+//         user.participatedEvents.push(eventId);
+        
+//         // Store the registration date in memory
+//         // const registrationDate = new Date();
+//         // if (!registrationDates[userId]) {
+//         //     registrationDates[userId] = {};
+//         // }
+//         // registrationDates[userId][eventId] = registrationDate;
+        
+//         await event.save();
+//         await user.save();
+        
+//         // Send registrationDate along with user data
+//         res.status(200).json({
+//             message: "User registered for the event successfully!",
+//             event,
+//             user,
+//             registrationDate
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+// export const registerInEvent = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+
+//         // Find the event by ID and populate participants
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+
+//         // Initialize participants if it's undefined
+//         if (!event.participants) {
+//             event.participants = [];
+//         }
+
+//         // Find the user by ID
+//         const user = await User.findById(userId);
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+
+//         // Check if the user is already registered for the event
+//         const alreadyRegistered = event.participants.some(participant => participant.toString() === userId);
+//         if (alreadyRegistered) {
+//             return next(customError(400, "User is already registered for this event!"));
+//         }
+
+//         // Add the user to the event's participants
+//         event.participants.push(userId);
+//         const registrationDate = new Date();
+
+//         // Save the updated event
+//         await event.save();
+
+//         // Send the response with the registration date
+//         res.status(200).json({
+//             message: "User registered for the event successfully!",
+//             event: {
+//                 _id: event._id,
+//                 participants: event.participants.map(participant => ({
+//                     userId: participant,
+//                     registrationDate: registrationDate
+//                 }))
+//             },
+//             registrationDate
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// export const getRegisteredUsers = async (req, res, next) => {
+//     try {
+//         const { eventId } = req.params;
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+
+//         // Add registration dates to participants
+//         const participantsWithRegistrationDates = event.user.map(participant => {
+//             const registrationDate = registrationDates[participant._id] ? registrationDates[participant._id]?.[eventId] : null;
+//             return {
+//                 ...participant._doc, // Spread the participant document
+//                 registrationDate: registrationDate
+//             };
+//         });
+
+//         // Create the response object with the updated participants
+//         const eventWithRegistrationDates = {
+//             ...event._doc, // Spread the event document
+//             participants: participantsWithRegistrationDates // Replace participants with the updated list
+//         };
+
+//         res.status(200).json(eventWithRegistrationDates);
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+
+
+// export const getRegisteredUsers = async (req, res, next) => {
+//     try {
+//         const { eventId, userId } = req.params;
+        
+//         // Fetch the event details
+//         const event = await Event.findById(eventId).populate("participants");
+//         if (!event) {
+//             return next(customError(404, "Event not found!"));
+//         }
+        
+//         // Fetch the user details
+//         const user = await User.findById(userId).populate("participatedEvents");
+//         if (!user) {
+//             return next(customError(404, "User not found!"));
+//         }
+        
+//         // Check if the user is registered for the event
+//         if (!event.participants.includes(userId)) {
+//             return next(customError(400, "User is not registered for this event!"));
+//         }
+        
+//         // Fetch registration date if you store it in a database
+//         // Assuming you store registrationDate in an array within the event or user document
+//         // Example: If the event has a participants array with objects { userId, registrationDate }
+//         const participant = event.participants.find(participant => participant.userId.toString() === userId);
+//         const registrationDate = participant ? participant.registrationDate : null;
+
+//         res.status(200).json({
+//             message: "User registration details retrieved successfully!",
+//             event,
+//             user,
+//             registrationDate
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 // export const leaveEvent = async (req, res, next) => {
 //     try {
 //         const { eventId, userId } = req.params;

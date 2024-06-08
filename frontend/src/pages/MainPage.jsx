@@ -31,7 +31,6 @@ const MainPage = () => {
     ...otherEvents
   ];
 
-  // Log the events for debugging
   
 
   return (
