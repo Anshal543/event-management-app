@@ -242,7 +242,9 @@ const SingleEventPage = () => {
     return `${url.substring(0, maxLength)}...`;
   };
 
+  // const isRegistered = event.participants.map((participant) => participant.userId)===(userId);
   const isRegistered = event.participants.includes(userId);
+
   const currentDate = new Date();
   const registrationEndDate = new Date(event.startOfEvent);
   const registrationOver = currentDate > registrationEndDate;
@@ -267,7 +269,7 @@ const SingleEventPage = () => {
         {event.typeOfCompetition && (
           <p className="text-gray-700 bg-gray-100 p-2 capitalize rounded"><strong className="font-semibold">Type of Competition:</strong> {event.typeOfCompetition}</p>
         )}
-        {event.amountOfWinner !== 0 && (
+        {event.amountOfWinner > 0 && (
           <p className="text-gray-700 bg-gray-100 p-2 rounded"><strong className="font-semibold">Amount of Winner:</strong> ${event.amountOfWinner}</p>
         )}
         {event.dateOfResult && (

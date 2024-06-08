@@ -31,7 +31,7 @@ const userSchema = new Schema({
         default: false,
     },
     participatedEvents: [
-        { type: mongoose.Schema.Types.ObjectId, ref: "Event" }
+        { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
     ],
 
 

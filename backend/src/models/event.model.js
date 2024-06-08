@@ -35,7 +35,6 @@ const eventSchema = new Schema(
             minLength: [3, "City must contain at least 3 characters!"],
         },
 
-
         registrationFee: {
             type: Number,
             default: 0,
@@ -65,7 +64,7 @@ const eventSchema = new Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
-            }
+            },
         ],
 
         amountOfWinner: {
@@ -75,7 +74,9 @@ const eventSchema = new Schema(
             type: String,
             minLength: [3, "Type must contain at least 3 characters!"],
         },
-        participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        participants: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        ],
     },
     { timestamps: true }
 );
