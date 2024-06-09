@@ -17,6 +17,8 @@ import SignUpPage from "./pages/SignUpPage";
 import UpdateEventPage from "./pages/UpdateEventPage";
 import HeroPage from "./pages/HeroPage";
 import GetUserOfEvent from "./pages/GetUserOfEvent";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -48,6 +50,8 @@ const App = () => {
           <Route path="/event/:eventId/registered-users" element={<GetUserOfEvent />} />
           <Route path="/single-event/:id" element={<SingleEventPage />} />
           <Route path="/getRegisteredEvents/:id" element={<GetRegisterEvent />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword/>} />
           <Route path="*" element={<NotFoundPage/>} />
         </Routes>
         <Footer />
