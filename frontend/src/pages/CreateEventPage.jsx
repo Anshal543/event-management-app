@@ -25,7 +25,6 @@ const eventSchema = z.object({
   // winner: z.string().optional(),
 });
 
-
 const CreateEventPage = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({
     resolver: zodResolver(eventSchema),
@@ -177,8 +176,12 @@ const CreateEventPage = () => {
         </div>
 
         {thumbnail && (
-          <div>
-            <img src={thumbnail} alt="thumbnail" className="mt-2 h-32 w-32 object-cover rounded-md" />
+          <div className="flex justify-center mt-4">
+            <img
+              src={thumbnail}
+              alt="thumbnail"
+              className="h-32 w-32 object-cover rounded-md border border-gray-300 shadow-md hover:shadow-lg transition-shadow duration-300"
+            />
           </div>
         )}
 
@@ -224,15 +227,6 @@ const CreateEventPage = () => {
               {errors.amountOfWinner && <p className="text-red-500 text-sm">{errors.amountOfWinner.message}</p>}
             </div>
 
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">Winner Email:</label>
-              <input
-                type="email"
-                {...register("winner")}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              {errors.winner && <p className="text-red-500 text-sm">{errors.winner.message}</p>}
-            </div> */}
           </>
         )}
 
@@ -251,4 +245,3 @@ const CreateEventPage = () => {
 };
 
 export default CreateEventPage;
-z
