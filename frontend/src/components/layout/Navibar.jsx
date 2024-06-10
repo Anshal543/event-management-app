@@ -176,7 +176,7 @@ export default function Navibar() {
                   <>
                     <button
                       onClick={() => (window.location.href = "/login")}
-                      className="text-white font-bold p-2 rounded-md bg-blue-800 hover:bg-blue-700 mr-2"
+                      className="text-gray-300 font-bold p-4 rounded-md hover:bg-gray-700 hover:text-white"
                     >
                       Login
                     </button>
