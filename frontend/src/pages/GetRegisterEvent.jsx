@@ -86,9 +86,9 @@ const GetRegisteredEvents = () => {
                     </div>
                 )}
             </div>
-            <footer className="bg-gray-800 text-white text-center py-4 mt-auto">
+            {/* <footer className="bg-gray-800 text-white text-center py-4 mt-auto">
                 &copy; 2024 Your Company. All rights reserved.
-            </footer>
+            </footer> */}
         </div>
     );
 };

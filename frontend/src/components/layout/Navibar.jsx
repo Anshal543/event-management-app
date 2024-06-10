@@ -18,7 +18,7 @@ import { logout } from "../../features/auth/authSlice";
 
 const initialNavigation = [
   { name: "Home", href: "/", current: false },
-  { name: "All Events", href: "/all-events", current: true },
+  { name: "All Events", href: "/all-events", current: false },
   { name: "Your Events", href: "/getRegisteredEvents/USER_ID", current: false },
   { name: "Contact Us", href: "/contact-us", current: false },
 ];
@@ -101,6 +101,14 @@ export default function Navibar() {
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
+                        onClick={() => {
+                          // Reset background color for all items
+                          const updatedNavigation = navigation.map(navItem => ({
+                            ...navItem,
+                            current: navItem.name === item.name
+                          }));
+                          setNavigation(updatedNavigation);
+                        }}
                       >
                         {item.name}
                       </Link>

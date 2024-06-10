@@ -10,8 +10,8 @@
 <!-- + work on page not found and footer -->
 <!-- + handle image at create and update event page -->
 <!-- + add a check if the user is already register show him you are already register -->
-show user details when your click on profile  
-update user info if user want
+<!-- show user details when your click on profile   -->
+<!-- update user info if user want -->
 <!-- handle reset password and contact for eventt in frontedn -->
 create 10 different event with different dates and competition
-work on update and user profile 
+<!-- work on update and user profile  -->
