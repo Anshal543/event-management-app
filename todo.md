@@ -14,3 +14,4 @@ show user details when your click on profile
 update user info if user want
 <!-- handle reset password and contact for eventt in frontedn -->
 create 10 different event with different dates and competition
+work on update and user profile 

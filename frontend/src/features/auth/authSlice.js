@@ -18,6 +18,15 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     }
 });
 
+export const updateUser = createAsyncThunk('auth/updateUser', async (userDetails) => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_AUTH_URL}/update/${userDetails.id}`, userDetails);
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  });
+
                  
 
 const authSlice = createSlice({
@@ -56,7 +65,21 @@ const authSlice = createSlice({
 
             .addCase(logout.rejected, (state, action) => {
                 state.authError = action.payload;
-            });
+            })
+            .addCase(updateUser.pending, (state) => {
+                state.authLoading = true;
+                state.authError = null;
+              })
+
+              .addCase(updateUser.fulfilled, (state, action) => {
+                state.userInfo = action.payload;
+                state.authError = null;
+                state.authLoading = false;
+              })
+              .addCase(updateUser.rejected, (state, action) => {
+                state.authError = action.payload;
+                state.authLoading = false;
+              });
     },
 });
 
