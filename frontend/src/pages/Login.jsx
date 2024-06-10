@@ -31,10 +31,16 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-    }
-  }, [userInfo]);
+    const checkUser = async () => {
+      // Simulate an async check for user info
+      if (userInfo) {
+        navigate("/");
+      } else {
+        setLoading(false);
+      }
+    };
+    checkUser();
+  }, [userInfo, navigate]);
 
   const onSubmit = async (data) => {
     try {

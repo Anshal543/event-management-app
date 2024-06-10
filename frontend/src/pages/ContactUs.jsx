@@ -15,9 +15,8 @@ const schema = z.object({
 });
 
 function ContactUs() {
-  const [responseMessage, setResponseMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  const userInfo = useSelector((state) => state.auth.userInfo?.rest._id);
+  const userInfo = useSelector((state) => state.auth.userInfo?.rest?._id);
 
   const {
     register,
@@ -29,27 +28,26 @@ function ContactUs() {
   });
 
   useEffect(() => {
-    const checkUser = async () => {
-      // Simulate checking cookies or local storage for user info
-      const user = userInfo; // Replace with actual cookie/local storage check if needed
-      if (!user) {
-        window.location.href = "/login";
-      } else {
-        setLoading(false);
-      }
-    };
-    checkUser();
+    if (!userInfo) {
+      setTimeout(() => {
+        if (!userInfo) {
+          window.location.href = "/login";
+        } else {
+          setLoading(false);
+        }
+      }, 1000); 
+    } else {
+      setLoading(false);
+    }
   }, [userInfo]);
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_CONTACTS_URL}/contact-us`, data);
-      setResponseMessage(response.data.message);
-      reset();
       toast.success(response.data.message);
+      reset();
     } catch (error) {
       const message = error.response?.data?.message || 'Something went wrong. Please try again.';
-      setResponseMessage(message);
       toast.error(message);
     }
   };
@@ -129,7 +127,6 @@ function ContactUs() {
             </button>
           </div>
         </form>
-        {responseMessage && <p className="mt-4 text-center text-red-500">{responseMessage}</p>}
       </div>
     </div>
   );

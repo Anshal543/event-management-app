@@ -68,14 +68,27 @@ export const auth = async (req, res, next) => {
 
 }
 
-export const logout = async(req,res,next)=>{
+export const logout = async (req, res, next) => {
     try {
         res.clearCookie("token");
 
         // Send a success response
         res.status(200).json({ message: "Logout successfully" });
-        
+
     } catch (error) {
         next(error)
+    }
+}
+
+export const update = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { username, email, password, mobileNo } = req.body;
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const user = await User.findByIdAndUpdate(id, { username, email, password: hashedPassword, mobileNo }, { new: true });
+        res.status(200).json({ user });
+    }
+    catch (error) {
+        next(error);
     }
 }
