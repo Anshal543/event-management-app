@@ -21,3 +21,4 @@ userid     "665ea4e958c6b3900f6824ce",
 
 show user details when your click on profile  
 update user info if user want
+handle reset password and contact for eventt in frontedn

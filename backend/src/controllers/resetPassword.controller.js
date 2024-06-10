@@ -20,7 +20,7 @@ const sendResetEmail = (email, token) => {
         from: process.env.GMAIL_USER,
         to: email,
         subject: 'Password Reset',
-        text: `Click the link to reset your password: http://localhost:8080/api/v1/users/reset-password/${token}`,
+        text: `Click the link to reset your password: http://localhost:5173/reset-password/${token}`,
     };
 
     transporter.sendMail(mailOptions, (err, info) => {

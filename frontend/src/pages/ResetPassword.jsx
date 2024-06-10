@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -8,6 +8,7 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +19,10 @@ const ResetPassword = () => {
     try {
       const response = await axios.post(`http://localhost:8080/api/v1/users/reset-password/${token}`, { newPassword });
       setMessage(response.data.message);
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      
     } catch (err) {
       setError(err.response.data.message || 'Something went wrong');
     }
