@@ -20,7 +20,7 @@ import contactRouter from "./routes/contactUs.route.js"
 
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/events", eventRouter)
-app.use("/api/v1/contact", contactRouter)
+app.use("/api/v1/contacts", contactRouter)
 
 app.use((err, req, res, next) => {
     // 

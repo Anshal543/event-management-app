@@ -19,6 +19,7 @@ const initialNavigation = [
   { name: "Home", href: "/", current: false },
   { name: "All Events", href: "/all-events", current: true },
   { name: "Your Events", href: "/getRegisteredEvents/USER_ID", current: false },
+  { name: "Contact Us", href: "/contact-us", current: false },
 ];
 
 function classNames(...classes) {
