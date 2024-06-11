@@ -50,5 +50,5 @@ To get started with the Event Management Web Application, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/event-management-app.git
+   git clone https://github.com/Anshal543/event-management-app.git
    cd event-management-app
