@@ -15,3 +15,5 @@
 <!-- handle reset password and contact for eventt in frontedn -->
 create 10 different event with different dates and competition
 <!-- work on update and user profile  -->
+
+change favicon
