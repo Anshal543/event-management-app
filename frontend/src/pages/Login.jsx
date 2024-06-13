@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, selectUserInfo } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
+import OAuth from "../components/utils/OAuth";
 
 const loginSchema = z.object({
   email: z
@@ -154,6 +155,7 @@ const Login = () => {
                 {isSubmitting ? "Signing in..." : "Sign in"}
               </button>
             </div>
+            <OAuth />
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">

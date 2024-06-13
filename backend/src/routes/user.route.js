@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, auth, logout, update, getUserDetails } from '../controllers/user.controller.js';
+import { register, login, auth, logout, update, getUserDetails, googleLogin } from '../controllers/user.controller.js';
 import { forgotPassword, resetPassword } from '../controllers/resetPassword.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
@@ -7,6 +7,7 @@ const router = Router();
 
 router.route('/register').post(register);
 router.route('/login').post(login);
+router.route('/google-login').post(googleLogin); // google login route
 router.route('/auth').get(auth)
 router.route('/delete').get(logout)
 router.route('/user-details/:id').get(verifyToken,getUserDetails)

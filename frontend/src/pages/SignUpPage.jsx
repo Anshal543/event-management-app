@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import OAuth from "../components/utils/OAuth";
 
 const schema = z.object({
   username: z.string().min(3, { message: "Username is required" }),
@@ -90,6 +91,7 @@ const SignUpPage = () => {
               </button>
               {error && <div className="text-red-500 mt-2">{error}</div>}
             </div>
+            <OAuth  />
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">

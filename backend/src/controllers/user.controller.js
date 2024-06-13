@@ -103,3 +103,32 @@ export const update = async (req, res, next) => {
         next(error);
     }
 }
+
+export const googleLogin = async (req, res, next) => {
+    try {
+        const { email, username } = req.body;
+        console.log(req.body);
+        const user = await User.findOne({ email });
+        console.log("test 1");
+        if (user) {
+            console.log("user");
+            const token = jwt.sign({ id: user._id, user: user.username }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            console.log("test 2");
+
+            res.cookie('token', token, { httpOnly: true }).json({ message: "Login successful" });
+        } else {
+            console.log("test 3");
+
+            const newUser = await User.create({ username, email,mobileNo: "94939597959", password:  bcrypt.hashSync("123456", 10)});
+            console.log("test 4");
+
+            const token = jwt.sign({ id: newUser._id, user: newUser.username }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            console.log("test 5");
+
+            res.cookie('token', token, { httpOnly: true }).json({ message: "Login successful" });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}
